@@ -1,0 +1,57 @@
+Monitor-Simple
+
+The Monitor::Simple allows simple monitoring of applications and
+services of your IT infrastructure. There are many such tools, some of
+them very complex and sophisticated. For example, one widely used is
+Nagios (http://www.nagios.org/). The Monitor::Simple does not aim, as
+its name indicates, for all features provided by those tools. It
+allows, however, to check whether your applications and services are
+running correctly. Its simple command-line interface can be used in
+cron jobs and reports can be viewed as a single HTML or text page.
+
+For more details see:
+   perldoc Monitor::Simple
+and
+   scripts/smonitor -man"
+
+INSTALLATION
+
+To install this module, run the following commands:
+
+	perl Makefile.PL
+	make
+	make test
+	make install
+
+SUPPORT AND DOCUMENTATION
+
+After installing, you can find documentation for this module with the
+perldoc command.
+
+    perldoc Monitor::Simple
+
+You can also look for information at:
+
+    RT, CPAN's request tracker
+        http://rt.cpan.org/NoAuth/Bugs.html?Dist=Monitor-Simple
+
+    AnnoCPAN, Annotated CPAN documentation
+        http://annocpan.org/dist/Monitor-Simple
+
+    CPAN Ratings
+        http://cpanratings.perl.org/d/Monitor-Simple
+
+    Search CPAN
+        http://search.cpan.org/dist/Monitor-Simple/
+
+
+LICENSE AND COPYRIGHT
+
+Copyright (c) 2011, Martin Senger, KAUST (King Abdullah University of Science and Technology) All Rights Reserved.
+
+This program is free software; you can redistribute it and/or modify it
+under the terms of either: the GNU General Public License as published
+by the Free Software Foundation; or the Artistic License.
+
+See http://dev.perl.org/licenses/ for more information.
+
