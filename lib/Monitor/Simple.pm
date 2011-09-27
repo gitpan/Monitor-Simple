@@ -23,7 +23,7 @@ Version 0.1.0
 
 =cut
 
-use version 0.77; our $VERSION = version->declare ("v0.1.0");
+use version; our $VERSION = qv(0.1.1);
 
 # values returned by plugins (compatible with Nagios'
 use constant {
