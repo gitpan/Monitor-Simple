@@ -2,9 +2,15 @@
 # Monitor::Simple::Notifier
 # Author: Martin Senger <martin.senger@gmail.com>
 # For copyright and disclaimer see below.
+#
+# ABSTRACT: See documentation in Monitor::Simple
+# PODNAME: Monitor::Simple::Notifier
 #-----------------------------------------------------------------
 
 package Monitor::Simple::Notifier;
+{
+  $Monitor::Simple::Notifier::VERSION = '0.2.0';
+}
 use warnings;
 use strict;
 use Monitor::Simple;
@@ -60,27 +66,11 @@ sub notify {
 	unless exists $result->{code};
 
     # find all relevant notifiers (both general and service specific)
-    my @all_relevant_notifiers = ();
-    if (exists $self->{config}->{general}->{notifier}) {
-	foreach my $notifier (@{ $self->{config}->{general}->{notifier} }) {
-	    push (@all_relevant_notifiers, $notifier)
-		if $self->matching_code ($result->{code}, $notifier->{on});
-	}
-    }
-    foreach my $service (@{ $self->{config}->{services} }) {
-	next unless $result->{service} eq $service->{id};
-	@all_relevant_notifiers = ()
-	    if exists $service->{'ignore-general-notifiers'};
-	foreach my $notifier (@{ $service->{notifier} }) {
-	    push (@all_relevant_notifiers, $notifier)
-		if $self->matching_code ($result->{code}, $notifier->{on});
-	}
-    }
+    my @all_relevant_notifiers = $self->get_relevant_notifiers ($result);
 
     # notify
     my $msg_files = {};   # keys are formats, values are names of temporary files
     foreach my $notifier (@all_relevant_notifiers) {
-	$notifier->{service} = $result->{service};
 	my $notifier_str =
 	    join (', ',
 		  map { "$_ => " .
@@ -126,6 +116,45 @@ sub notify {
 		   ($stdout ? ", STDOUT: $stdout" : ''));
 	}
     }
+}
+
+#-----------------------------------------------------------------
+# Find and return an array with all relevant notifiers (both general
+# and services specific) for the given $result which is a hashref with
+# this content:
+#
+#    { service => $service_id,
+#      code    => $code,
+#      msg     => $msg }
+#
+# It also copies service ID from the $result into each returned
+# notifier.
+# -----------------------------------------------------------------
+sub get_relevant_notifiers {
+    my ($self, $result) = @_;
+
+    my @all_relevant_notifiers = ();
+    if (exists $self->{config}->{general}->{notifier}) {
+	foreach my $notifier (@{ $self->{config}->{general}->{notifier} }) {
+	    push (@all_relevant_notifiers, $notifier)
+		if $self->matching_code ($result->{code}, $notifier->{on});
+	}
+    }
+    foreach my $service (@{ $self->{config}->{services} }) {
+	next unless $result->{service} eq $service->{id};
+	@all_relevant_notifiers = ()
+	    if exists $service->{'ignore-general-notifiers'};
+	foreach my $notifier (@{ $service->{notifier} }) {
+	    push (@all_relevant_notifiers, $notifier)
+		if $self->matching_code ($result->{code}, $notifier->{on});
+	}
+    }
+
+    foreach my $notifier (@all_relevant_notifiers) {
+	$notifier->{service} = $result->{service};
+    }
+
+    return @all_relevant_notifiers;
 }
 
 #-----------------------------------------------------------------
@@ -211,4 +240,30 @@ sub extract_emails {
 
 
 1;
+
+
+=pod
+
+=head1 NAME
+
+Monitor::Simple::Notifier - See documentation in Monitor::Simple
+
+=head1 VERSION
+
+version 0.2.0
+
+=head1 AUTHOR
+
+Martin Senger <martin.senger@gmail.com>
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2011 by Martin Senger, KAUST (King Abdullah University of Science and Technology) All Rights Reserved..
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
+
+=cut
+
+
 __END__

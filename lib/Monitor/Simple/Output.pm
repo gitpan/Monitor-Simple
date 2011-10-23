@@ -2,9 +2,15 @@
 # Monitor::Simple::Output
 # Author: Martin Senger <martin.senger@gmail.com>
 # For copyright and disclaimer see Monitor::Simple.
+#
+# ABSTRACT: See documentation in Monitor::Simple
+# PODNAME: Monitor::Simple::Output
 #-----------------------------------------------------------------
 
 package Monitor::Simple::Output;
+{
+  $Monitor::Simple::Output::VERSION = '0.2.0';
+}
 use warnings;
 use strict;
 use Monitor::Simple;
@@ -243,7 +249,7 @@ sub footer {
 #    yes        yes        - all output to file
 #                          - errors also on STDOUT
 #    no         no         - all output to STDOUT
-#    no         yes        - only errors to STDOUT 
+#    no         yes        - only errors to STDOUT
 #
 # Note that additionally to the above the STDERR can also be printed
 # to - if a plugin chooses to produce some. The STDERR is not
@@ -252,7 +258,9 @@ sub footer {
 use Fcntl qw(:flock SEEK_END); # import LOCK_* and SEEK_END constants
 sub out {
     my ($self, $service_id, $code, $msg) = @_;
-    my $service_config = Monitor::Simple::Config->extract_service_config ($service_id, $self->{config});
+    my $service_config =
+	( Monitor::Simple::Config->extract_service_config ($service_id, $self->{config}) ||
+	  { id   => $service_id, name => $service_id } );
     my $service_name = ($service_config->{name} or $service_config->{id});
     my $doc = $self->create_report ($service_config, scalar localtime(), $service_name, $code, $msg);
     if ($self->{outfile} or not $self->{onlyerr}) {
@@ -282,4 +290,30 @@ sub unlock {
 }
 
 1;
+
+
+=pod
+
+=head1 NAME
+
+Monitor::Simple::Output - See documentation in Monitor::Simple
+
+=head1 VERSION
+
+version 0.2.0
+
+=head1 AUTHOR
+
+Martin Senger <martin.senger@gmail.com>
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2011 by Martin Senger, KAUST (King Abdullah University of Science and Technology) All Rights Reserved..
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
+
+=cut
+
+
 __END__

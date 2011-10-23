@@ -26,7 +26,7 @@ use vars qw($opt_c $opt_f $opt_u $opt_w
 	    $free_memory $used_memory $total_memory
 	    $crit_level $warn_level
             %exit_codes @memlist
-            $percent $fmt_pct 
+            $percent $fmt_pct
             $verb_err $command_line);
 
 # Predefined exit codes for Nagios
@@ -142,5 +142,5 @@ sub usage()
   print "check_mem.pl comes with absolutely NO WARRANTY either implied or explicit\n";
   print "This program is licensed under the terms of the\n";
   print "GNU General Public License (check source code for details)\n";
-  exit $exit_codes{'UNKNOWN'}; 
+  exit $exit_codes{'UNKNOWN'};
 }

@@ -5,7 +5,6 @@
     <notifiers-dir></notifiers-dir>
 
     <notifier missing-command="script1"/>
-    <notifier command="script2"/>
 
   </general>
 

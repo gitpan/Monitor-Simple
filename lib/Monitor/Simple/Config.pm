@@ -2,9 +2,15 @@
 # Monitor::Simple::Config
 # Author: Martin Senger <martin.senger@gmail.com>
 # For copyright and disclaimer see below.
+#
+# ABSTRACT: See documentation in Monitor::Simple
+# PODNAME: Monitor::Simple::Config
 #-----------------------------------------------------------------
 
 package Monitor::Simple::Config;
+{
+  $Monitor::Simple::Config::VERSION = '0.2.0';
+}
 use warnings;
 use strict;
 use Carp;
@@ -14,8 +20,8 @@ use File::Basename;
 use Monitor::Simple;
 use Log::Log4perl qw(:easy);
 
-my $DEFAULT_CONFIG_FILE = 'monitor-simple-cfg.xml';
-my $ENV_CONFIG_DIR = 'MONITOR_SIMPLE_CFG_DIR';
+our $DEFAULT_CONFIG_FILE = 'monitor-simple-cfg.xml';
+our $ENV_CONFIG_DIR = 'MONITOR_SIMPLE_CFG_DIR';
 
 #-----------------------------------------------------------------
 # Try to locate given $filename and return its full path:
@@ -119,7 +125,7 @@ sub validate {
 		if (ref ($service->{plugin}) ne 'HASH') {
 		    $doc .= "Service '$service->{name}' has more than one plugin tag.\n";
 		} else {
-		    # each plugin must have an ID
+		    # each plugin must have a command
 		    $doc .= "Service '$service->{name}' has a plugin without any 'command' attribute.\n"
 			unless $service->{plugin}->{command};
 		}
@@ -128,7 +134,7 @@ sub validate {
 		$doc .= "Service number $count does not have any plugin section.\n";
 	    }
 
-	    # each notifier must have an ID
+	    # each notifier must have a command
 	    if (exists $service->{notifier}) {
 		my $ncount = 0;
 		foreach my $notifier (@{ $service->{notifier} }) {
@@ -140,7 +146,7 @@ sub validate {
 	}
     }
 
-    # each general notifier must have an ID
+    # each general notifier must have a command
     if (exists $config->{general}->{notifier}) {
     	my $ncount = 0;
     	foreach my $notifier (@{ $config->{general}->{notifier} }) {
@@ -156,7 +162,7 @@ sub validate {
 #-----------------------------------------------------------------
 # Return a hashref with configuration for a given service (identified
 # by its $service_id). If such configuration cannot be found, a warning is
-# issued and an (almost) empty hashref is returned.
+# issued and undef is returned.
 #
 # The service configuration is looked for in the given hashref $config
 # containing the full configuration.
@@ -170,8 +176,7 @@ sub extract_service_config {
     }
     # return a dummy service configuration
     LOGWARN ("Service name '$service_id' was not found in the current configuration.");
-    return { id   => $service_id,
-	     name => $service_id };
+    return undef;
 }
 
 #-----------------------------------------------------------------
@@ -195,7 +200,7 @@ sub extract_service_config {
 sub create_plugin_args {
     my ($self, $config_file, $full_config, $service_id) = @_;
     my $service_config = $self->extract_service_config ($service_id, $full_config);
-    return () unless exists $service_config->{plugin};  # strange
+    return () unless $service_config;  # service not found
 
     if (exists $service_config->{plugin}->{args}) {
 	# args exists: use them
@@ -208,4 +213,30 @@ sub create_plugin_args {
 }
 
 1;
+
+
+=pod
+
+=head1 NAME
+
+Monitor::Simple::Config - See documentation in Monitor::Simple
+
+=head1 VERSION
+
+version 0.2.0
+
+=head1 AUTHOR
+
+Martin Senger <martin.senger@gmail.com>
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2011 by Martin Senger, KAUST (King Abdullah University of Science and Technology) All Rights Reserved..
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
+
+=cut
+
+
 __END__

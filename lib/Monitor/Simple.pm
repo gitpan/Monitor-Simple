@@ -2,28 +2,18 @@
 # Monitor::Simple
 # Author: Martin Senger <martin.senger@gmail.com>
 # For copyright and disclaimer se below.
+#
+# ABSTRACT: Simple monitoring of applications and services
+# PODNAME: Monitor::Simple
 #-----------------------------------------------------------------
 
 package Monitor::Simple;
+{
+  $Monitor::Simple::VERSION = '0.2.0';
+}
 
 use warnings;
 use strict;
-
-#------------------------------------------
-# Versioning
-#------------------------------------------
-
-=head1 NAME
-
-Monitor::Simple - Simple monitoring of applications and services
-
-=head1 VERSION
-
-Version 0.1.0
-
-=cut
-
-use version; our $VERSION = 0.1;
 
 # values returned by plugins (compatible with Nagios'
 use constant {
@@ -100,7 +90,7 @@ sub check_services {
     }
     my $outputter = ($args->{outputter} || Monitor::Simple::Output->new (config   => $config));
 
-    # optional filter tells which only services to check filter can be
+    # optional filter tells which only services to check; filter can be
     # hashref or arrayref or scalar (all with service name(s) we wish
     # to check)
     my $filter = $args->{filter};
@@ -142,8 +132,8 @@ sub check_services {
 	}
 	my @command = ($command,
 		       Monitor::Simple::Config->create_plugin_args ($config_file,
-								  $config,
-								  $service->{id}));
+								    $config,
+								    $service->{id}));
 	DEBUG ("Started: " . join (' ', @command));
 	my ($stdout, $stderr, $success, $exit_code) = capture_exec (@command);
 
@@ -170,6 +160,20 @@ sub check_services {
 }
 
 
+
+
+1; # End of Monitor::Simple
+
+__END__
+=pod
+
+=head1 NAME
+
+Monitor::Simple - Simple monitoring of applications and services
+
+=head1 VERSION
+
+version 0.2.0
 
 =head1 SYNOPSIS
 
@@ -384,7 +388,6 @@ tag). In such case use the C<ignore-general-notifiers> tag:
 For exploring configuration, the I<Monitor::Simple> distribution has
 directory F<Monitor/Simple/configs> with few examples of configuration
 files.
-
 
 =head2 Plugins
 
@@ -846,7 +849,6 @@ And then you do whatever your notifier needs to do. You can use the
 logging system by calling C<Log::Log4perl> so-called "easy" methods:
 DEBUG(), INFO(), WARN(), ERROR(), LOGDIE() and LOGWARN().
 
-
 =head1 MODULES and METHODS
 
 The best way to explore modules, methods and how to use them is to
@@ -941,11 +943,9 @@ C<$Monitor::Simple::DEFAULT_CONFIG_FILE>.
 
 Return a hashref with configuration for a given service (identified by
 its $service_id). If such configuration cannot be found, a warning is
-issued and an (almost) empty hashref is returned. The service
-configuration is looked for in the given hashref $config containing
-the full configuration (usually obtained by
-L<get_config()|get_config____filename__>).
-
+issued and undef is returned. The service configuration is looked for
+in the given hashref $config containing the full configuration
+(usually obtained by L<get_config()|get_config____filename__>).
 
 =head2 Monitor::Simple::UserAgent
 
@@ -1012,7 +1012,7 @@ C<onlyerr> arguments:
 
    no         no         all output to STDOUT
 
-   no         yes        only errors to STDOUT 
+   no         yes        only errors to STDOUT
    ---------------------------------------------
 
 =item format => tsv | human | html
@@ -1030,8 +1030,7 @@ F<Monitor/Simple/configs/monitor-default.css>.
 
 =back
 
-
-=head3 list_formats 
+=head3 list_formats
 
 A class method. It returns a hashref with a list of actually supported
 formats (keys) and their description (values). At the time of writing
@@ -1122,7 +1121,6 @@ or L<parse_notifier_args()|parse_notifier_args___args_>.
 It returns currently used logging options - in the same format as the
 same options are define in L<log_init()|log_init___logging_options_>.
 
-
 =head2 Monitor::Simple::Utils
 
 This module is a container for various methods that did not fit
@@ -1164,7 +1162,6 @@ addresses (may be empty for some notifiers). It uses logging options
 (if any found in $args) to set the logging system. Read about possible
 arguments in $args in L<"Notifiers">.
 
-
 =head1 AUTHOR
 
 Martin Senger, C<< <martin.senger at gmail.com> >>
@@ -1192,11 +1189,6 @@ locking.
 
 Similarly, log files are not using any locking.
 
-=item Timeout for plugin C<check-prg.pl>
-
-There should be also an option specifying a timeout (same as it is for
-Web-based plugins).
-
 =back
 
 =head1 SUPPORT
@@ -1204,7 +1196,6 @@ Web-based plugins).
 You can find documentation for this module with the perldoc command.
 
     perldoc Monitor::Simple
-
 
 You can also look for information at:
 
@@ -1228,18 +1219,16 @@ L<http://search.cpan.org/dist/Monitor-Simple/>
 
 =back
 
+=head1 AUTHOR
 
-=head1 LICENSE AND COPYRIGHT
+Martin Senger <martin.senger@gmail.com>
 
-Copyright (c) 2011, Martin Senger, KAUST (King Abdullah University of Science and Technology) All Rights Reserved.
+=head1 COPYRIGHT AND LICENSE
 
-This program is free software; you can redistribute it and/or modify it
-under the terms of either: the GNU General Public License as published
-by the Free Software Foundation; or the Artistic License.
+This software is copyright (c) 2011 by Martin Senger, KAUST (King Abdullah University of Science and Technology) All Rights Reserved..
 
-See http://dev.perl.org/licenses/ for more information.
-
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
 
 =cut
 
-1; # End of Monitor::Simple

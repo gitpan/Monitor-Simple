@@ -2,9 +2,15 @@
 # Monitor::Simple::Log
 # Author: Martin Senger <martin.senger@gmail.com>
 # For copyright and disclaimer see below.
+#
+# ABSTRACT: See documentation in Monitor::Simple
+# PODNAME: Monitor::Simple::Log
 #-----------------------------------------------------------------
 
 package Monitor::Simple::Log;
+{
+  $Monitor::Simple::Log::VERSION = '0.2.0';
+}
 
 use warnings;
 use strict;
@@ -81,3 +87,28 @@ sub logging_args {
 }
 
 1;
+
+__END__
+=pod
+
+=head1 NAME
+
+Monitor::Simple::Log - See documentation in Monitor::Simple
+
+=head1 VERSION
+
+version 0.2.0
+
+=head1 AUTHOR
+
+Martin Senger <martin.senger@gmail.com>
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2011 by Martin Senger, KAUST (King Abdullah University of Science and Technology) All Rights Reserved..
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
+
+=cut
+

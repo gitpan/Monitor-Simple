@@ -2,9 +2,15 @@
 # Monitor::Simple::UserAgent
 # Author: Martin Senger <martin.senger@gmail.com>
 # For copyright and disclaimer see below.
+#
+# ABSTRACT: See documentation in Monitor::Simple
+# PODNAME: Monitor::Simple::UserAgent
 #-----------------------------------------------------------------
 
 package Monitor::Simple::UserAgent;
+{
+  $Monitor::Simple::UserAgent::VERSION = '0.2.0';
+}
 use warnings;
 use strict;
 use LWP::UserAgent;
@@ -49,7 +55,7 @@ sub _get_agent {
 #-----------------------------------------------------------------
 sub head_or_exit {
     my ($self, $service_id, $full_config) = @_;
-    my $config = Monitor::Simple::Config->extract_service_config ($service_id, $full_config);
+    my $config = Monitor::Simple::Utils->service_config_or_exit ($service_id, $full_config);
 
     # warn (and exit) if the test cannot be executed
     unless (exists $config->{plugin}->{'head-test'}) {
@@ -88,7 +94,7 @@ sub head_or_exit {
 #-----------------------------------------------------------------
 sub post_or_exit {
     my ($self, $service_id, $full_config) = @_;
-    my $config = Monitor::Simple::Config->extract_service_config ($service_id, $full_config);
+    my $config = Monitor::Simple::Utils->service_config_or_exit ($service_id, $full_config);
 
     # warn (and exit) if the test cannot be executed
     unless (exists $config->{plugin}->{'post-test'}) {
@@ -131,7 +137,7 @@ sub post_or_exit {
 #-----------------------------------------------------------------
 sub get_or_exit {
     my ($self, $service_id, $full_config) = @_;
-    my $config = Monitor::Simple::Config->extract_service_config ($service_id, $full_config);
+    my $config = Monitor::Simple::Utils->service_config_or_exit ($service_id, $full_config);
 
     # warn (and exit) if the test cannot be executed
     unless (exists $config->{plugin}->{'get-test'}) {
@@ -221,4 +227,30 @@ sub process_response {
 
 
 1;
+
+
+=pod
+
+=head1 NAME
+
+Monitor::Simple::UserAgent - See documentation in Monitor::Simple
+
+=head1 VERSION
+
+version 0.2.0
+
+=head1 AUTHOR
+
+Martin Senger <martin.senger@gmail.com>
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2011 by Martin Senger, KAUST (King Abdullah University of Science and Technology) All Rights Reserved..
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
+
+=cut
+
+
 __END__

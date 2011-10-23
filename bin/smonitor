@@ -4,7 +4,15 @@
 #
 #   Martin Senger <martin.senger@gmail.com>
 #   September 2011
+#
+# ABSTRACT: command-line tool for monitoring services
+# PODNAME: smonitor
 # -----------------------------------------------------------------
+
+package main;
+{
+  $main::VERSION = '0.2.0';
+}  # this is here to make Dist:Dzilla's PkgVersion happy
 
 use warnings;
 use strict;
@@ -22,9 +30,6 @@ my ($opt_outfile, $opt_onlyerr, $opt_format, $opt_cssurl);
 my ($opt_logfile, $opt_loglevel, $opt_logformat, $opt_debug);
 my ($opt_npp, $opt_list_formats, @opt_filter, $opt_nonotif);
 BEGIN {
-
-    my $VERSION = '0.1.0';
-
     use Getopt::Long;
     use Pod::Usage;
 
@@ -55,21 +60,24 @@ BEGIN {
 		 'lf'                 => \$opt_list_formats,
 		 'services|filters=s' => \@opt_filter,
 		 'nn|nonotif'         => \$opt_nonotif,
-	 
+
 	) or pod2usage (2);
     pod2usage (-verbose => 0, -exitval => 0) if $opt_h;
     pod2usage (-verbose => 1, -exitval => 0) if $opt_help;
     pod2usage (-verbose => 2, -exitval => 0) if $opt_m;
 
-    print
-	"$VERSION (using",
-	" Monitor::Simple $Monitor::Simple::VERSION",
-	", Perl $^V)\n"
-	and exit(0) if $opt_v;
-
     @opt_filter = split (m{\s*,\s*}, join (',', @opt_filter));
 
 }  # end of BEGIN
+
+# -------------------- Show version and exit ----------------------
+if ($opt_v) {
+    no strict;    # because the $VERSION will be added only when
+    no warnings;  # the distribution is fully built up
+    print "$VERSION\n";
+    exit(0);
+}
+# -----------------------------------------------------------------
 
 $| = 1;  # flushing STDOUT
 
@@ -127,11 +135,17 @@ $loop_args->{nonotif} = $opt_nonotif if $opt_nonotif;
 Monitor::Simple->check_services ($loop_args);
 
 
-__END__
+
+
+=pod
 
 =head1 NAME
 
 smonitor - command-line tool for monitoring services
+
+=head1 VERSION
+
+version 0.2.0
 
 =head1 SYNOPSIS
 
@@ -139,7 +153,7 @@ smonitor - command-line tool for monitoring services
       where <output-options> are: -outfile <file>
                                   -onlyerr
                                   -format human | tsv | html
-                                  -cssurl <url> 
+                                  -cssurl <url>
       where <log-options> are:    -logfile <file>
                                   -loglevel debug | info | warn | error | fatal
                                   -debug
@@ -155,7 +169,6 @@ smonitor - command-line tool for monitoring services
    smonitor -help
    smonitor -man
    smonitor -version
-
 
 =head1 DESCRIPTION
 
@@ -229,9 +242,9 @@ are independent and both can be used in the same time.
 
 How the report will be formatted. Default is C<human>:
 
-   DATE                           SERVICE                 STATUS  MESSAGE                                                                                                           
-   Tue Sep 27 10:40:15 2011       Memory Check                 2  Memory CRITICAL - 91.7% (1601124 kB) used                                                                         
-   Tue Sep 27 10:40:15 2011       Current timestamp            0  Tue Sep 27 10:40:15 2011                                                                                          
+   DATE                           SERVICE                 STATUS  MESSAGE
+   Tue Sep 27 10:40:15 2011       Memory Check                 2  Memory CRITICAL - 91.7% (1601124 kB) used
+   Tue Sep 27 10:40:15 2011       Current timestamp            0  Tue Sep 27 10:40:15 2011
    Tue Sep 27 10:40:15 2011       Born To Be Killed            2  Plugin 'Monitor/Simple/plugins/born-to-be-killed.pl' died with signal 9
 
    Tue Sep 27 10:40:15 2011       Synonia Bad Params           2  500 Can't connect to Xdb.cbrc.kaust.edu.sa:80...
@@ -323,7 +336,6 @@ the C<-format> parameter) and exits:
    human   Easier readable by humans
    tsv     TAB-separated (good for machines)
 
-
 =head2 General options
 
 =over
@@ -346,14 +358,19 @@ Print the version and exits.
 
 =back
 
+=head1 AUTHOR
 
+Martin Senger <martin.senger@gmail.com>
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2011 by Martin Senger, KAUST (King Abdullah University of Science and Technology) All Rights Reserved..
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
 
 =cut
 
-   smonitor -showcfg
-   smonitor -lf
 
-   smonitor -h
-   smonitor -help
-   smonitor -man
-   smonitor -version
+__END__
+
