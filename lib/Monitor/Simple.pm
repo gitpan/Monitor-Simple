@@ -9,7 +9,7 @@
 
 package Monitor::Simple;
 {
-  $Monitor::Simple::VERSION = '0.2.0';
+  $Monitor::Simple::VERSION = '0.2.1';
 }
 
 use warnings;
@@ -59,13 +59,13 @@ my $default_npp = 10; # maximum number of child processes in parallel
 # configuration.
 #
 # Recognized arguments:
-#    { config    => $config OR config_file => $config_file,
-#      npp       => <integer>,
-#      outputter => instance of Monitor::Simple::Output,
-#      filter    => hashref (keys are service IDS) or
-#                   arrayref with service IDs, or
-#                   scalar with just one service ID
-#      nonotif   => boolean
+#    { config_file => $config_file,
+#      npp         => <integer>,
+#      outputter   => instance of Monitor::Simple::Output,
+#      filter      => hashref (keys are service IDS) or
+#                     arrayref with service IDs, or
+#                     scalar with just one service ID
+#      nonotif     => boolean
 #    }
 # -----------------------------------------------------------------
 sub check_services {
@@ -74,14 +74,11 @@ sub check_services {
     # recognized arguments
     my $config;
     my $config_file;
-    if ($args->{config}) {
-	$config = $args->{config};
-	$config_file = ($args->{config_file} || Monitor::Simple::Config->resolve_config_file ($config));
-    } elsif ($args->{config_file}) {
+    if ($args->{config_file}) {
 	$config_file = $args->{config_file};
 	$config = Monitor::Simple::Config->get_config ($config_file);
     } else {
-	LOGDIE ("check_services: Missing argument 'config' or 'config_file'. Cannot do anything.\n");
+	LOGDIE ("check_services: Missing argument 'config_file'. Cannot do anything.\n");
     }
     my $npp = ($args->{npp} || $default_npp);
     if ($npp < 1) {
@@ -117,7 +114,7 @@ sub check_services {
     foreach my $service (@{ $config->{services} }) {
 
 	# filtering of services
-	next if $filter and not $filter->{ $service->{id} };
+	next if $filter and not exists $filter->{ $service->{id} };
 
 	# this does the fork and for the parent branch and continues the foreach loop
 	$pm->start and next;
@@ -173,7 +170,7 @@ Monitor::Simple - Simple monitoring of applications and services
 
 =head1 VERSION
 
-version 0.2.0
+version 0.2.1
 
 =head1 SYNOPSIS
 
@@ -870,12 +867,9 @@ following keys and values:
 
 =over
 
-=item config => $config
-
 =item config_file -> $file
 
-At least one of these two keys must be given. It specifies which
-configuration to use.
+A mandatory argument. It specifies what configuration to use.
 
 =item outputter => an instance of I<Monitor::Simple::Output>
 

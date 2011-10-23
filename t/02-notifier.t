@@ -153,9 +153,7 @@ is (scalar @relevant_for_3, 1, "Number of relevant notifiers for service $result
     is_deeply (\@args,
 	       [
 		'-emails',
-		'guest3@localhost',
-		'guest2@localhost',
-		'guest@localhost',
+		'guest3@localhost,guest2@localhost,guest@localhost',
 		'-service',
 		'date1',
 		'-msg',

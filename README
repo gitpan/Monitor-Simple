@@ -2,7 +2,7 @@ NAME
     Monitor::Simple - Simple monitoring of applications and services
 
 VERSION
-    version 0.2.0
+    version 0.2.1
 
 SYNOPSIS
        # check services defined in 'my.cfg' and report to the STDOUT
@@ -667,10 +667,8 @@ MODULES and METHODS
     report about all checks. The $args is a hashref with the following keys
     and values:
 
-    config => $config
     config_file -> $file
-        At least one of these two keys must be given. It specifies which
-        configuration to use.
+        A mandatory argument. It specifies what configuration to use.
 
     outputter => an instance of *Monitor::Simple::Output*
         This outputter will be responsible for creating the summary report

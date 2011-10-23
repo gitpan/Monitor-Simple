@@ -42,6 +42,7 @@
       },
       "test" : {
          "requires" : {
+            "File::Slurp" : 0,
             "FindBin" : 0,
             "Test::More" : 0
          }
@@ -55,6 +56,6 @@
       },
       "homepage" : "http://search.cpan.org/dist/Monitor-Simple"
    },
-   "version" : "0.2.0"
+   "version" : "0.2.1"
 }
 

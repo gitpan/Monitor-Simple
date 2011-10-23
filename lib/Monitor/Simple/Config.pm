@@ -9,7 +9,7 @@
 
 package Monitor::Simple::Config;
 {
-  $Monitor::Simple::Config::VERSION = '0.2.0';
+  $Monitor::Simple::Config::VERSION = '0.2.1';
 }
 use warnings;
 use strict;
@@ -174,7 +174,7 @@ sub extract_service_config {
 	    return $service if $service->{id} eq $service_id;
 	}
     }
-    # return a dummy service configuration
+    # return an undef
     LOGWARN ("Service name '$service_id' was not found in the current configuration.");
     return undef;
 }
@@ -223,7 +223,7 @@ Monitor::Simple::Config - See documentation in Monitor::Simple
 
 =head1 VERSION
 
-version 0.2.0
+version 0.2.1
 
 =head1 AUTHOR
 

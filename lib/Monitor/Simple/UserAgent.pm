@@ -9,7 +9,7 @@
 
 package Monitor::Simple::UserAgent;
 {
-  $Monitor::Simple::UserAgent::VERSION = '0.2.0';
+  $Monitor::Simple::UserAgent::VERSION = '0.2.1';
 }
 use warnings;
 use strict;
@@ -237,7 +237,7 @@ Monitor::Simple::UserAgent - See documentation in Monitor::Simple
 
 =head1 VERSION
 
-version 0.2.0
+version 0.2.1
 
 =head1 AUTHOR
 

@@ -38,20 +38,6 @@
       </plugin>
     </service>
 
-    <!--
-    <service id="date" name="Current timestamp">
-      <description>Show current date</description>
-      <plugin command="get-date.pl"/>
-      <notifier command="send-email" on="all" email="some.one@localhost"/>
-      <notifier command="send-email-via-ssh" on="all" email="some.one@gmail.com">
-        <args>
-          <arg>-login</arg>
-          <arg>my.name@myserver.org</arg>
-        </args>
-      </notifier>
-    </service>
-    -->
-
     <service id="s1" name="S 1">
       <description>Description</description>
       <plugin command="check-post.pl">

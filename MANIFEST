@@ -20,6 +20,7 @@ lib/Monitor/Simple/configs/erroneous-monitor-cfg.xml
 lib/Monitor/Simple/configs/monitor-default.css
 lib/Monitor/Simple/configs/monitor-simple-cfg.xml.template
 lib/Monitor/Simple/configs/simple-example-cfg.xml
+lib/Monitor/Simple/configs/simple-example-with-notificationcfg.xml
 lib/Monitor/Simple/notifiers/copy-to-file
 lib/Monitor/Simple/notifiers/send-email
 lib/Monitor/Simple/notifiers/send-email-via-ssh
@@ -34,6 +35,9 @@ lib/Monitor/Simple/plugins/get-date.pl
 t/00-load.t
 t/01-config.t
 t/02-notifier.t
+t/03-utils.t
+t/04-plugins.t
+t/05-output.t
 t/data/bad-config.xml
 t/data/bad.xml
 t/data/c1.empty
@@ -41,4 +45,5 @@ t/data/c2.empty
 t/data/c3.empty
 t/data/config.xml
 t/data/notifiers.xml
+t/data/plugins.xml
 t/release-eol.t

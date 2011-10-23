@@ -9,7 +9,7 @@
 
 package Monitor::Simple::Output;
 {
-  $Monitor::Simple::Output::VERSION = '0.2.0';
+  $Monitor::Simple::Output::VERSION = '0.2.1';
 }
 use warnings;
 use strict;
@@ -62,6 +62,7 @@ sub new {
     } else {
 	$self->{fhout} = *STDOUT;
     }
+    my $oldfh = select ($self->{fhout}); $| = 1; select ($oldfh);  # turn autoflush on
 
     # done
     return $self;
@@ -289,6 +290,17 @@ sub unlock {
 	or LOGDIE ("Cannot unlock output file with reports: $!\n");
 }
 
+sub close {
+    my ($self) = shift;
+    close ($self->{fhout})
+	if $self->{outfile};
+}
+
+sub DESTROY {
+    my ($self) = shift;
+    $self->close();
+}
+
 1;
 
 
@@ -300,7 +312,7 @@ Monitor::Simple::Output - See documentation in Monitor::Simple
 
 =head1 VERSION
 
-version 0.2.0
+version 0.2.1
 
 =head1 AUTHOR
 

@@ -1,3 +1,24 @@
+2011-10-23  Martin Senger  <martin.senger&#64;gmail.com>
+
+	* Version 0.2.1 released
+
+2011-10-11  Martin Senger  <martin.senger&#64;gmail.com>
+
+	* Fixed mandatory arguments for check_services().
+
+	* Fixed passing filters as a hashref to check_services().
+
+	* Fixed closing output files in outputters in time; adding there
+	also autoflushing.
+
+2011-10-10  Martin Senger  <martin.senger&#64;gmail.com>
+
+	* Fixed small bugs in Config.pm and Notifier.pm.
+
+	* Added tests.
+
+	* Fixed sending more emails from a single notifier.
+
 2011-10-08  Martin Senger  <martin.senger&#64;gmail.com>
 
 	* Added timeout option for check-prg.pl plugin.

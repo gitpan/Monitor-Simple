@@ -12,6 +12,7 @@ my %WriteMakefileArgs = (
   "ABSTRACT" => "Simple monitoring of applications and services",
   "AUTHOR" => "Martin Senger <martin.senger\@gmail.com>",
   "BUILD_REQUIRES" => {
+    "File::Slurp" => 0,
     "FindBin" => 0,
     "Test::More" => 0
   },
@@ -43,7 +44,7 @@ my %WriteMakefileArgs = (
     "strict" => 0,
     "warnings" => 0
   },
-  "VERSION" => "0.2.0",
+  "VERSION" => "0.2.1",
   "test" => {
     "TESTS" => "t/*.t"
   }

@@ -9,7 +9,7 @@
 
 package Monitor::Simple::Notifier;
 {
-  $Monitor::Simple::Notifier::VERSION = '0.2.0';
+  $Monitor::Simple::Notifier::VERSION = '0.2.1';
 }
 use warnings;
 use strict;
@@ -197,7 +197,7 @@ sub create_notifier_args {
 
     # ...add email addresses (if any)
     my $emails = $self->extract_emails ($notifier);
-    push (@args, '-emails', @$emails)
+    push (@args, '-emails', join (',', @$emails))
 	if @$emails > 0;
 
     # ...and the default arguments
@@ -250,7 +250,7 @@ Monitor::Simple::Notifier - See documentation in Monitor::Simple
 
 =head1 VERSION
 
-version 0.2.0
+version 0.2.1
 
 =head1 AUTHOR
 

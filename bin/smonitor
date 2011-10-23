@@ -11,7 +11,7 @@
 
 package main;
 {
-  $main::VERSION = '0.2.0';
+  $main::VERSION = '0.2.1';
 }  # this is here to make Dist:Dzilla's PkgVersion happy
 
 use warnings;
@@ -115,7 +115,6 @@ if ($opt_list_formats) {
 # The main job: checking services
 # -----------------------------------------------------------------
 my $loop_args = {
-    config      => $config,
     config_file => $config_file,
     outputter   => Monitor::Simple::Output->new (outfile  => $opt_outfile,
 						 onlyerr  => $opt_onlyerr,
@@ -145,7 +144,7 @@ smonitor - command-line tool for monitoring services
 
 =head1 VERSION
 
-version 0.2.0
+version 0.2.1
 
 =head1 SYNOPSIS
 
