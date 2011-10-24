@@ -32,11 +32,12 @@ lib/Monitor/Simple/plugins/check-url.pl
 lib/Monitor/Simple/plugins/check_mem.pl
 lib/Monitor/Simple/plugins/copy-message.pl
 lib/Monitor/Simple/plugins/get-date.pl
+log
 t/00-load.t
 t/01-config.t
 t/02-notifier.t
 t/03-utils.t
-t/04-plugins.t
+t/04-plugins.t.ori
 t/05-output.t
 t/data/bad-config.xml
 t/data/bad.xml

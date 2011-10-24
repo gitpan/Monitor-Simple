@@ -9,7 +9,7 @@
 
 package Monitor::Simple;
 {
-  $Monitor::Simple::VERSION = '0.2.1';
+  $Monitor::Simple::VERSION = '0.2.2';
 }
 
 use warnings;
@@ -152,6 +152,7 @@ sub check_services {
     # system
     $pm->wait_all_children();
     $outputter->footer();
+    $outputter->close();
 
     INFO ('--- Checking finished [' . (time() - $start_time) . ' s] ---');
 }
@@ -170,7 +171,7 @@ Monitor::Simple - Simple monitoring of applications and services
 
 =head1 VERSION
 
-version 0.2.1
+version 0.2.2
 
 =head1 SYNOPSIS
 

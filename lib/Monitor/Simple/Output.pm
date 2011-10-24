@@ -9,7 +9,7 @@
 
 package Monitor::Simple::Output;
 {
-  $Monitor::Simple::Output::VERSION = '0.2.1';
+  $Monitor::Simple::Output::VERSION = '0.2.2';
 }
 use warnings;
 use strict;
@@ -296,10 +296,10 @@ sub close {
 	if $self->{outfile};
 }
 
-sub DESTROY {
-    my ($self) = shift;
-    $self->close();
-}
+# sub DESTROY {
+#     my ($self) = shift;
+#     $self->close();
+# }
 
 1;
 
@@ -312,7 +312,7 @@ Monitor::Simple::Output - See documentation in Monitor::Simple
 
 =head1 VERSION
 
-version 0.2.1
+version 0.2.2
 
 =head1 AUTHOR
 

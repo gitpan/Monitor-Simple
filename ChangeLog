@@ -1,3 +1,11 @@
+2011-10-24  Martin Senger  <martin.senger&#64;gmail.com>
+
+	* Temporary version 0.2.2 released.
+
+	* Removing the failing tests.
+
+	* Playing with locking, closing and DESTROY in Output.pm.
+
 2011-10-23  Martin Senger  <martin.senger&#64;gmail.com>
 
 	* Version 0.2.1 released

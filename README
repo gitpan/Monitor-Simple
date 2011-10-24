@@ -2,7 +2,7 @@ NAME
     Monitor::Simple - Simple monitoring of applications and services
 
 VERSION
-    version 0.2.1
+    version 0.2.2
 
 SYNOPSIS
        # check services defined in 'my.cfg' and report to the STDOUT
