@@ -51,7 +51,7 @@ diag( "Testing the configuration" );
 {
     my $bad_xml_file = test_file ('bad.xml');
     eval { Monitor::Simple::Config->get_config ($bad_xml_file) };
-    ok ($@ =~ m{mismatched tag}, "There should be an error in '$bad_xml_file'");
+    ok ($@, "There should be an error in '$bad_xml_file'");
 }
 
 # validating configuration file

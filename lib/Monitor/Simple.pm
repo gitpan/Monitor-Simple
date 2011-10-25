@@ -9,7 +9,7 @@
 
 package Monitor::Simple;
 {
-  $Monitor::Simple::VERSION = '0.2.2';
+  $Monitor::Simple::VERSION = '0.2.3';
 }
 
 use warnings;
@@ -171,7 +171,7 @@ Monitor::Simple - Simple monitoring of applications and services
 
 =head1 VERSION
 
-version 0.2.2
+version 0.2.3
 
 =head1 SYNOPSIS
 

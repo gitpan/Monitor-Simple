@@ -16,6 +16,7 @@ use warnings;
 use strict;
 
 use Monitor::Simple;
+#use Log::Log4perl qw(:easy);
 use constant { MY_ID => 'copy-message' };
 
 Monitor::Simple::Utils->report_and_exit (MY_ID, undef, $ARGV[0], $ARGV[1]);

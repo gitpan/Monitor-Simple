@@ -1,5 +1,0 @@
-# Testing external plugins
-t/04-plugins.t .. ok
-All tests successful.
-Files=1, Tests=37,  1 wallclock secs ( 0.03 usr  0.00 sys +  1.62 cusr  0.18 csys =  1.83 CPU)
-Result: PASS

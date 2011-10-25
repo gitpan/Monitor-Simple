@@ -1,7 +1,7 @@
 #!perl -w
 
-#use Test::More qw(no_plan);
-use Test::More tests => 37;
+use Test::More qw(no_plan);
+#use Test::More tests => 37;
 
 use File::Slurp;
 use File::Temp qw/ tempfile /;
@@ -71,6 +71,7 @@ my $config_file = test_file ('plugins.xml');
 
 # report and exit (in parallel); filters as HASH
 {
+    last;
     my ($fh, $filename) = tempfile();
     my $filters = {
     	ok       => 0,
@@ -87,6 +88,8 @@ my $config_file = test_file ('plugins.xml');
     };
     Monitor::Simple->check_services ($args);
     my @lines = read_file ($filename);
+    diag ("in HASH:");
+    diag (join ("\n", map { chomp; $_ } @lines));
     is (scalar @lines, 4, "Number of parallel service checks");
     foreach my $line (@lines) {
 	my @fields = split (/\t/, $line, 4);
@@ -103,6 +106,7 @@ my $config_file = test_file ('plugins.xml');
     my ($fh, $filename) = tempfile();
     my $filters = ['ok', 'warning', 'critical', 'unknown'];
     my $args = {
+#	npp         => 1,
 	config_file => $config_file,
 	filter      => $filters,
 	outputter   => Monitor::Simple::Output->new (outfile  => $filename,
@@ -111,6 +115,8 @@ my $config_file = test_file ('plugins.xml');
     };
     Monitor::Simple->check_services ($args);
     my @lines = read_file ($filename);
+    diag ("in ARRAY:");
+    diag (join ("\n", map { chomp; $_ } @lines));
     is (scalar @lines, 4, "Number of parallel service checks");
     foreach my $line (@lines) {
 	my @fields = split (/\t/, $line, 4);
@@ -122,6 +128,7 @@ my $config_file = test_file ('plugins.xml');
 
 # plugin: check-prg.pl
 {
+    last;
     my ($fh, $filename) = tempfile();
     my $filters = {
     	prg     => 0,
@@ -138,6 +145,8 @@ my $config_file = test_file ('plugins.xml');
     Monitor::Simple->check_services ($args);
     $outputter->close();
     my @lines = read_file ($filename);
+    diag ("in PRG:");
+    diag (join ("\n", map { chomp; $_ } @lines));
     is (scalar @lines, 2, "Number of check-prg checks");
     foreach my $line (@lines) {
 	my @fields = split (/\t/, $line, 4);

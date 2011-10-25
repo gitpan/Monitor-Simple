@@ -9,7 +9,7 @@
 
 package Monitor::Simple::Config;
 {
-  $Monitor::Simple::Config::VERSION = '0.2.2';
+  $Monitor::Simple::Config::VERSION = '0.2.3';
 }
 use warnings;
 use strict;
@@ -223,7 +223,7 @@ Monitor::Simple::Config - See documentation in Monitor::Simple
 
 =head1 VERSION
 
-version 0.2.2
+version 0.2.3
 
 =head1 AUTHOR
 

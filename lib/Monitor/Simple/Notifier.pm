@@ -9,7 +9,7 @@
 
 package Monitor::Simple::Notifier;
 {
-  $Monitor::Simple::Notifier::VERSION = '0.2.2';
+  $Monitor::Simple::Notifier::VERSION = '0.2.3';
 }
 use warnings;
 use strict;
@@ -250,7 +250,7 @@ Monitor::Simple::Notifier - See documentation in Monitor::Simple
 
 =head1 VERSION
 
-version 0.2.2
+version 0.2.3
 
 =head1 AUTHOR
 

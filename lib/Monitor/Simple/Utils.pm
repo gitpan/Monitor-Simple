@@ -9,7 +9,7 @@
 
 package Monitor::Simple::Utils;
 {
-  $Monitor::Simple::Utils::VERSION = '0.2.2';
+  $Monitor::Simple::Utils::VERSION = '0.2.3';
 }
 use warnings;
 use strict;
@@ -317,7 +317,7 @@ Monitor::Simple::Utils - See documentation in Monitor::Simple
 
 =head1 VERSION
 
-version 0.2.2
+version 0.2.3
 
 =head1 AUTHOR
 

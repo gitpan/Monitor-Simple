@@ -32,12 +32,12 @@ lib/Monitor/Simple/plugins/check-url.pl
 lib/Monitor/Simple/plugins/check_mem.pl
 lib/Monitor/Simple/plugins/copy-message.pl
 lib/Monitor/Simple/plugins/get-date.pl
-log
+result.tsv
 t/00-load.t
 t/01-config.t
 t/02-notifier.t
 t/03-utils.t
-t/04-plugins.t.ori
+t/04-plugins.t.TBD
 t/05-output.t
 t/data/bad-config.xml
 t/data/bad.xml
@@ -48,3 +48,4 @@ t/data/config.xml
 t/data/notifiers.xml
 t/data/plugins.xml
 t/release-eol.t
+'testing simple monitor'

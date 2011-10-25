@@ -9,7 +9,7 @@
 
 package Monitor::Simple::Log;
 {
-  $Monitor::Simple::Log::VERSION = '0.2.2';
+  $Monitor::Simple::Log::VERSION = '0.2.3';
 }
 
 use warnings;
@@ -97,7 +97,7 @@ Monitor::Simple::Log - See documentation in Monitor::Simple
 
 =head1 VERSION
 
-version 0.2.2
+version 0.2.3
 
 =head1 AUTHOR
 

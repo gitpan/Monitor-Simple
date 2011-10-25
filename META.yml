@@ -36,4 +36,4 @@ requires:
 resources:
   bugtracker: http://rt.cpan.org/NoAuth/Bugs.html?Dist=Monitor-Simple
   homepage: http://search.cpan.org/dist/Monitor-Simple
-version: 0.2.2
+version: 0.2.3

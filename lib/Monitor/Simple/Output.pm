@@ -9,7 +9,7 @@
 
 package Monitor::Simple::Output;
 {
-  $Monitor::Simple::Output::VERSION = '0.2.2';
+  $Monitor::Simple::Output::VERSION = '0.2.3';
 }
 use warnings;
 use strict;
@@ -266,12 +266,12 @@ sub out {
     my $doc = $self->create_report ($service_config, scalar localtime(), $service_name, $code, $msg);
     if ($self->{outfile} or not $self->{onlyerr}) {
 	lock ($self->{fhout});
-	print { $self->{fhout} } $doc;
+	print { $self->{fhout} } $doc;  # or die "Output missed: $doc";
 	unlock ($self->{fhout});
     }
     if ($code ne Monitor::Simple::RETURN_OK and $self->{onlyerr}) {
 	lock (*STDOUT);
-	print STDOUT $doc;
+	print STDOUT $doc;  # or die "Output missed: $doc";
 	unlock (*STDOUT);
     }
 }
@@ -292,7 +292,7 @@ sub unlock {
 
 sub close {
     my ($self) = shift;
-    close ($self->{fhout})
+    close ($self->{fhout}) || LOGDIE ("Cannot close $self->{outfile}\n")
 	if $self->{outfile};
 }
 
@@ -312,7 +312,7 @@ Monitor::Simple::Output - See documentation in Monitor::Simple
 
 =head1 VERSION
 
-version 0.2.2
+version 0.2.3
 
 =head1 AUTHOR
 
