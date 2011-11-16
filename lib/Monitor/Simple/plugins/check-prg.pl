@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 #
 # Plugin for checking any command-line program by executing it with
 # given arguments and reporting warning if there was any STDERR and

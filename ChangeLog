@@ -1,3 +1,15 @@
+2011-11-16  Martin Senger  <martin.senger&#64;gmail.com>
+
+	* Version 0.2.4 released
+
+	* Fixed (hopefully finally) the parallel access to the report
+	files in outputters
+
+2011-10-26  Martin Senger  <martin.senger&#64;gmail.com>
+
+	* Fixed /usr/bin/perl to /usr/bin/env perl in plugins and
+	notifiers.
+
 2011-10-25  Martin Senger  <martin.senger&#64;gmail.com>
 
 	* Temporary version 0.2.3 released.

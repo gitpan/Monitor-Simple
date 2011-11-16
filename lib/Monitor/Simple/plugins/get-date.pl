@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 #
 # Plugin for checking availability and (sometimes) correctness
 # of an application (whose name is part of this script's name).

@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 #
 # A notifier script that sends emails to the given addresses by using
 # an extrenal server that will be first accessed by ssh.

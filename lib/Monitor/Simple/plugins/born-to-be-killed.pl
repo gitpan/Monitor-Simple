@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 #
 # Plugin for checking availability... well, whatever - because it does
 # notjing except to kill itself.

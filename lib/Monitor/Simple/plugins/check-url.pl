@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 #
 # Plugin for checking availability of a single URL (using the HTTP
 # HEAD method).

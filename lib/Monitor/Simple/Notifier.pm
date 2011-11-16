@@ -9,7 +9,7 @@
 
 package Monitor::Simple::Notifier;
 {
-  $Monitor::Simple::Notifier::VERSION = '0.2.3';
+  $Monitor::Simple::Notifier::VERSION = '0.2.4';
 }
 use warnings;
 use strict;
@@ -250,7 +250,7 @@ Monitor::Simple::Notifier - See documentation in Monitor::Simple
 
 =head1 VERSION
 
-version 0.2.3
+version 0.2.4
 
 =head1 AUTHOR
 
@@ -258,7 +258,7 @@ Martin Senger <martin.senger@gmail.com>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2011 by Martin Senger, KAUST (King Abdullah University of Science and Technology) All Rights Reserved..
+This software is copyright (c) 2011 by Martin Senger, CBRC-KAUST (Computational Biology Research Center - King Abdullah University of Science and Technology) All Rights Reserved..
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

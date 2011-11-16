@@ -9,7 +9,7 @@
 
 package Monitor::Simple::Output;
 {
-  $Monitor::Simple::Output::VERSION = '0.2.3';
+  $Monitor::Simple::Output::VERSION = '0.2.4';
 }
 use warnings;
 use strict;
@@ -55,14 +55,15 @@ sub new {
 	$self->{report_format} = "%-30s %-${longest_name_len}s  %6s  %s\n";
     }
 
-    # prepare handlers for result
+    # prepare output
     if ($self->{outfile}) {
 	open ($self->{fhout}, '>', $self->{outfile})
 	    or LOGDIE ("Cannot open file '$self->{outfile}' for writing: $!\n");
+	close ($self->{fhout});
     } else {
 	$self->{fhout} = *STDOUT;
+	my $oldfh = select ($self->{fhout}); $| = 1; select ($oldfh);  # turn autoflush on
     }
-    my $oldfh = select ($self->{fhout}); $| = 1; select ($oldfh);  # turn autoflush on
 
     # done
     return $self;
@@ -201,6 +202,24 @@ sub escapeHTML {
     return $value;
 }
 
+#------------------------------------------------------------------ 
+# An atomic output, protected by file locking. All output goes through
+# here.
+# -----------------------------------------------------------------
+sub _out {
+    my ($self, $msg) = @_;
+    if ($self->{outfile}) {
+	local *DATA;
+	open (DATA, "+<", $self->{outfile})
+	    or LOGDIE "Cannot open " . $self->{outfile} . ": $!\n";
+	lock_file (*DATA);
+	print DATA $msg or LOGDIE ("Output missed: $msg");
+	close DATA;
+    } else {
+	print STDOUT $msg or LOGDIE ("Output missed: $msg");
+    }
+}
+
 #-----------------------------------------------------------------
 # Output header-line in a format given in $self->{format}, or given by
 # (otherwise optional) $header.
@@ -210,20 +229,18 @@ sub header {
     return if $self->{format} eq 'tsv';   # no headers for machines
 
     if ($self->{outfile} or not $self->{onlyerr}) {
-	lock ($self->{fhout});
 	if ($header) {
 	    # print whatever header was sent here
-	    print { $self->{fhout} } $header;
+	    $self->_out ($header);
 
 	} else {
 	    # ...or make a default header (which depends on the format)
 	    if ($self->{format} eq 'html') {
-		print { $self->{fhout} } $self->html_header (@Headers);
+		$self->_out ($self->html_header (@Headers));
 	    } else {
-		print { $self->{fhout} } $self->create_report ({}, @Headers);
+		$self->_out ($self->create_report ({}, @Headers));
 	    }
 	}
-	unlock ($self->{fhout});
     }
 }
 
@@ -256,7 +273,6 @@ sub footer {
 # to - if a plugin chooses to produce some. The STDERR is not
 # controlled by this module.
 # -----------------------------------------------------------------
-use Fcntl qw(:flock SEEK_END); # import LOCK_* and SEEK_END constants
 sub out {
     my ($self, $service_id, $code, $msg) = @_;
     my $service_config =
@@ -265,36 +281,31 @@ sub out {
     my $service_name = ($service_config->{name} or $service_config->{id});
     my $doc = $self->create_report ($service_config, scalar localtime(), $service_name, $code, $msg);
     if ($self->{outfile} or not $self->{onlyerr}) {
-	lock ($self->{fhout});
-	print { $self->{fhout} } $doc;  # or die "Output missed: $doc";
-	unlock ($self->{fhout});
+	$self->_out ($doc);
     }
     if ($code ne Monitor::Simple::RETURN_OK and $self->{onlyerr}) {
-	lock (*STDOUT);
-	print STDOUT $doc;  # or die "Output missed: $doc";
-	unlock (*STDOUT);
+	print STDOUT $doc or LOGDIE ("Output missed: $doc");
     }
 }
 
-sub lock {
+use Fcntl qw(:flock SEEK_END); # import LOCK_* and SEEK_END constants
+sub lock_file {
     my ($fh) = @_;
     flock ($fh, LOCK_EX) or LOGDIE ("Cannot lock output file with reports: $!\n");
-
-    # and, in case someone appended while we were waiting...
     seek ($fh, 0, SEEK_END) or LOGDIE ("Cannot seek output file with reports: $!\n");
 }
 
-sub unlock {
-    my ($fh) = @_;
-    flock ($fh, LOCK_UN)
-	or LOGDIE ("Cannot unlock output file with reports: $!\n");
-}
+# sub unlock_file {
+#     my ($fh) = @_;
+#     flock ($fh, LOCK_UN)
+# 	or LOGDIE ("Cannot unlock output file with reports: $!\n");
+# }
 
-sub close {
-    my ($self) = shift;
-    close ($self->{fhout}) || LOGDIE ("Cannot close $self->{outfile}\n")
-	if $self->{outfile};
-}
+# sub close {
+#     my ($self) = shift;
+#     close ($self->{fhout}) || LOGDIE ("Cannot close $self->{outfile}: $!\n")
+# 	if $self->{outfile};
+# }
 
 # sub DESTROY {
 #     my ($self) = shift;
@@ -312,7 +323,7 @@ Monitor::Simple::Output - See documentation in Monitor::Simple
 
 =head1 VERSION
 
-version 0.2.3
+version 0.2.4
 
 =head1 AUTHOR
 
@@ -320,7 +331,7 @@ Martin Senger <martin.senger@gmail.com>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2011 by Martin Senger, KAUST (King Abdullah University of Science and Technology) All Rights Reserved..
+This software is copyright (c) 2011 by Martin Senger, CBRC-KAUST (Computational Biology Research Center - King Abdullah University of Science and Technology) All Rights Reserved..
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

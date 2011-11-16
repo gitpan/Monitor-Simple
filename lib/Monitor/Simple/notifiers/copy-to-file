@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 #
 # A notifier script that writes notification to a given file. The file
 # can be on a remote machine if you have an ssh access (based on

@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 #
 # Plugin for checking availability of a single web page, using first
 # the HTTP HEAD method and then the HTTP POST method.

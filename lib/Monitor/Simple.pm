@@ -9,7 +9,7 @@
 
 package Monitor::Simple;
 {
-  $Monitor::Simple::VERSION = '0.2.3';
+  $Monitor::Simple::VERSION = '0.2.4';
 }
 
 use warnings;
@@ -152,7 +152,6 @@ sub check_services {
     # system
     $pm->wait_all_children();
     $outputter->footer();
-    $outputter->close();
 
     INFO ('--- Checking finished [' . (time() - $start_time) . ' s] ---');
 }
@@ -171,7 +170,7 @@ Monitor::Simple - Simple monitoring of applications and services
 
 =head1 VERSION
 
-version 0.2.3
+version 0.2.4
 
 =head1 SYNOPSIS
 
@@ -1220,7 +1219,7 @@ Martin Senger <martin.senger@gmail.com>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2011 by Martin Senger, KAUST (King Abdullah University of Science and Technology) All Rights Reserved..
+This software is copyright (c) 2011 by Martin Senger, CBRC-KAUST (Computational Biology Research Center - King Abdullah University of Science and Technology) All Rights Reserved..
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

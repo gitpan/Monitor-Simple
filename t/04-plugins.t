@@ -1,7 +1,7 @@
 #!perl -w
 
-use Test::More qw(no_plan);
-#use Test::More tests => 37;
+#use Test::More qw(no_plan);
+use Test::More tests => 23;
 
 use File::Slurp;
 use File::Temp qw/ tempfile /;
@@ -42,6 +42,19 @@ diag( "Testing external plugins" );
 my $config = get_config ('plugins.xml');
 my $config_file = test_file ('plugins.xml');
 
+sub do_checking {
+    my ($title, $args, $filename, $expected_lines) = @_;
+    Monitor::Simple->check_services ($args);
+    my @lines = read_file ($filename);
+#    diag ($title);
+#    diag (join ("\n", map { chomp; $_ } @lines));
+    is (scalar @lines, $expected_lines, "Number of parallel service checks [$title]");
+    foreach my $line (@lines) {
+	my @fields = split (/\t/, $line, 4);
+	is (scalar @fields, 4, "Found only partional line [$title]: $line");
+    }
+}
+
 # report and exit (one by one); filter as SCALAR
 {
     my $report_tests = {
@@ -60,18 +73,13 @@ my $config_file = test_file ('plugins.xml');
 							 'format' => 'tsv',
 							 config   => $config),
 	};
-	Monitor::Simple->check_services ($args);
-	my @fields = split (/\t/, read_file ($filename), 4);
-	is ($fields[1], $service,                  "Plugin returns: service name");
-	is ($fields[2], $report_tests->{$service}, "Plugin returns: return code");
-	ok ($fields[3] =~ m{\U$service\E},         "Plugin returns: message");
+	do_checking ("In SCALAR [$service]:", $args, $filename, 1);
 	unlink $filename;
     }
 }
 
 # report and exit (in parallel); filters as HASH
 {
-    last;
     my ($fh, $filename) = tempfile();
     my $filters = {
     	ok       => 0,
@@ -86,18 +94,7 @@ my $config_file = test_file ('plugins.xml');
 						     'format' => 'tsv',
 						     config   => $config),
     };
-    Monitor::Simple->check_services ($args);
-    my @lines = read_file ($filename);
-    diag ("in HASH:");
-    diag (join ("\n", map { chomp; $_ } @lines));
-    is (scalar @lines, 4, "Number of parallel service checks");
-    foreach my $line (@lines) {
-	my @fields = split (/\t/, $line, 4);
-	my $service = $fields[1];
-	ok (exists $filters->{$service}, "Lost service?");
-	is ($fields[2], $filters->{$service}, "Plugin returns 2: return code");
-	ok ($fields[3] =~ m{\U$service\E}, "Plugin returns 2: message");
-    }
+    do_checking ('In HASH:', $args, $filename, 4);
     unlink $filename;
 }
 
@@ -106,29 +103,18 @@ my $config_file = test_file ('plugins.xml');
     my ($fh, $filename) = tempfile();
     my $filters = ['ok', 'warning', 'critical', 'unknown'];
     my $args = {
-#	npp         => 1,
 	config_file => $config_file,
 	filter      => $filters,
 	outputter   => Monitor::Simple::Output->new (outfile  => $filename,
 						     'format' => 'tsv',
 						     config   => $config),
     };
-    Monitor::Simple->check_services ($args);
-    my @lines = read_file ($filename);
-    diag ("in ARRAY:");
-    diag (join ("\n", map { chomp; $_ } @lines));
-    is (scalar @lines, 4, "Number of parallel service checks");
-    foreach my $line (@lines) {
-	my @fields = split (/\t/, $line, 4);
-	my $service = $fields[1];
-	ok ($fields[3] =~ m{\U$service\E}, "Plugin returns 3: message");
-    }
+    do_checking ('In ARRAY:', $args, $filename, 4);
     unlink $filename;
 }
 
 # plugin: check-prg.pl
 {
-    last;
     my ($fh, $filename) = tempfile();
     my $filters = {
     	prg     => 0,
@@ -142,18 +128,7 @@ my $config_file = test_file ('plugins.xml');
 	filter      => $filters,
 	outputter   => $outputter,
     };
-    Monitor::Simple->check_services ($args);
-    $outputter->close();
-    my @lines = read_file ($filename);
-    diag ("in PRG:");
-    diag (join ("\n", map { chomp; $_ } @lines));
-    is (scalar @lines, 2, "Number of check-prg checks");
-    foreach my $line (@lines) {
-	my @fields = split (/\t/, $line, 4);
-	my $service = $fields[1];
-	ok (exists $filters->{$service}, "Lost service? [$line]");
-	is ($fields[2], $filters->{$service}, "check-prg: return code [$line]");
-    }
+    do_checking ('In PRG:', $args, $filename, 2);
     unlink $filename;
 }
 

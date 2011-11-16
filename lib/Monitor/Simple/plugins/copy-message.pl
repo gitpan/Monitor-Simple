@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 #
 # Testing plugin. It exits with the exit code given in ARGV[0] with
 # the message given in ARGV[1].
