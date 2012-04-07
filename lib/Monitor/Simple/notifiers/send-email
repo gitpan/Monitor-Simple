@@ -26,20 +26,20 @@ my $subject = "Notification from the service [$service_id]";
 my $list_of_emails = join (',', @$emails);
 
 # input file with the notification message
-open (MSG, '<', $msgfile)
+open (my $msg, '<', $msgfile)
     or LOGDIE ("Cannot open file '$msgfile' with the notification message: $!\n");
 
 # output stream to the 'mail' command
 my @command = ('mail', '-s', "'$subject'", $list_of_emails);
 DEBUG ("[$0] Command: " . join (' ', @command));
-open (MAIL, '|-', @command);
+open (my $mail, '|-', @command);
 
 # send the message
-while (<MSG>) {
-    print MAIL $_;
+while (<$msg>) {
+    print $mail $_;
 }
-close MAIL;
-close MSG;
+close $mail;
+close $msg;
 
 INFO ("[$0] $subject: $list_of_emails");
 

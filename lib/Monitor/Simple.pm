@@ -8,12 +8,11 @@
 #-----------------------------------------------------------------
 
 package Monitor::Simple;
-{
-  $Monitor::Simple::VERSION = '0.2.4';
-}
 
 use warnings;
 use strict;
+
+our $VERSION = '0.2.5'; # VERSION
 
 # values returned by plugins (compatible with Nagios'
 use constant {
@@ -75,15 +74,15 @@ sub check_services {
     my $config;
     my $config_file;
     if ($args->{config_file}) {
-	$config_file = $args->{config_file};
-	$config = Monitor::Simple::Config->get_config ($config_file);
+        $config_file = $args->{config_file};
+        $config = Monitor::Simple::Config->get_config ($config_file);
     } else {
-	LOGDIE ("check_services: Missing argument 'config_file'. Cannot do anything.\n");
+        LOGDIE ("check_services: Missing argument 'config_file'. Cannot do anything.\n");
     }
     my $npp = ($args->{npp} || $default_npp);
     if ($npp < 1) {
-	LOGWARN ("check_services: Argument 'npp' must be positive. Replaced by default value $default_npp.\n");
-	$npp = $default_npp;
+        LOGWARN ("check_services: Argument 'npp' must be positive. Replaced by default value $default_npp.\n");
+        $npp = $default_npp;
     }
     my $outputter = ($args->{outputter} || Monitor::Simple::Output->new (config   => $config));
 
@@ -92,20 +91,20 @@ sub check_services {
     # to check)
     my $filter = $args->{filter};
     if ($filter) {
-	if (ref ($filter) eq 'ARRAY') {
-	    $filter = { map { $_ => 1 } @$filter };
-	} elsif (ref ($filter) eq 'HASH') {
-	    # already done
-	} else {
-	    $filter = { $filter => 1 };
-	}
+        if (ref ($filter) eq 'ARRAY') {
+            $filter = { map { $_ => 1 } @$filter };
+        } elsif (ref ($filter) eq 'HASH') {
+            # already done
+        } else {
+            $filter = { $filter => 1 };
+        }
     }
     $filter = undef unless keys %$filter > 0;
 
     # before the main checking loop starts
     $outputter->header();
     my $notifier = Monitor::Simple::Notifier->new (config  => $config,
-						   cfgfile => $config_file);
+                                                   cfgfile => $config_file);
 
     # main loop
     INFO ('--- Checking started ---');
@@ -113,37 +112,37 @@ sub check_services {
     my $pm = new Parallel::ForkManager ($npp);
     foreach my $service (@{ $config->{services} }) {
 
-	# filtering of services
-	next if $filter and not exists $filter->{ $service->{id} };
+        # filtering of services
+        next if $filter and not exists $filter->{ $service->{id} };
 
-	# this does the fork and for the parent branch and continues the foreach loop
-	$pm->start and next;
+        # this does the fork and for the parent branch and continues the foreach loop
+        $pm->start and next;
 
-	# this is the child branch: execute an external plugin...
-	my $command = $service->{plugin}->{command};
-	unless (File::Spec->file_name_is_absolute ($command)) {
-	    my $plugins_dir = $config->{general}->{'plugins-dir'};
-	    if ($plugins_dir) {
-		$command = File::Spec->catfile ($plugins_dir, $command);
-	    }
-	}
-	my @command = ($command,
-		       Monitor::Simple::Config->create_plugin_args ($config_file,
-								    $config,
-								    $service->{id}));
-	DEBUG ("Started: " . join (' ', @command));
-	my ($stdout, $stderr, $success, $exit_code) = capture_exec (@command);
+        # this is the child branch: execute an external plugin...
+        my $command = $service->{plugin}->{command};
+        unless (File::Spec->file_name_is_absolute ($command)) {
+            my $plugins_dir = $config->{general}->{'plugins-dir'};
+            if ($plugins_dir) {
+                $command = File::Spec->catfile ($plugins_dir, $command);
+            }
+        }
+        my @command = ($command,
+                       Monitor::Simple::Config->create_plugin_args ($config_file,
+                                                                    $config,
+                                                                    $service->{id}));
+        DEBUG ("Started: " . join (' ', @command));
+        my ($stdout, $stderr, $success, $exit_code) = capture_exec (@command);
 
-	# ...and make the result report
-	print STDERR "$stderr\n" if $stderr;  # do not hide standard errors, if any
-	my ($code, $msg) = Monitor::Simple::Utils->process_exit ($command, $exit_code, $stdout);
-	$outputter->out ($service->{id}, $code, $msg);
-	unless (exists $args->{nonotif} and $args->{nonotif}) {
-	    $notifier->notify ( { service => $service->{id},
-				  code    => $code,
-				  msg     => $msg } );
-	}
-	$pm->finish;
+        # ...and make the result report
+        print STDERR "$stderr\n" if $stderr;  # do not hide standard errors, if any
+        my ($code, $msg) = Monitor::Simple::Utils->process_exit ($command, $exit_code, $stdout);
+        $outputter->out ($service->{id}, $code, $msg);
+        unless (exists $args->{nonotif} and $args->{nonotif}) {
+            $notifier->notify ( { service => $service->{id},
+                                  code    => $code,
+                                  msg     => $msg } );
+        }
+        $pm->finish;
     }
 
     # here the parent branch continue when all child process have been
@@ -170,7 +169,7 @@ Monitor::Simple - Simple monitoring of applications and services
 
 =head1 VERSION
 
-version 0.2.4
+version 0.2.5
 
 =head1 SYNOPSIS
 
@@ -440,7 +439,7 @@ method C<Monitor::Simple::UserAgent-E<gt>head_or_exit()>.
 
 =head3 Plugin: B<check-post.pl>
 
-This is a slightly generalized L<check-url.pl|plugin__check_url_pl>
+This is a slightly generalized L<check-url.pl|"Plugin:_check-url.pl">
 plugin. It can do also the C<head-test>s (as the C<check-url.pl> does)
 but its main purpose is to send data to the service using the I<HTTP
 POST> method. It allows you to check whether your service returns
@@ -483,7 +482,7 @@ method C<Monitor::Simple::UserAgent-E<gt>post_or_exit()>.
 
 =head3 Plugin: B<check-get.pl>
 
-This is very similar to L<check-post.pl|plugin__check_post_pl> plugin,
+This is very similar to L<check-post.pl|"Plugin:_check-post.pl"> plugin,
 except it uses I<HTTP GET> method. And, therefore, it does not use
 C<data> tag in the configuration file (because all input data are
 already part of the C<url> tag). It does not use I<HTTP HEAD> method.
@@ -874,7 +873,7 @@ A mandatory argument. It specifies what configuration to use.
 =item outputter => an instance of I<Monitor::Simple::Output>
 
 This outputter will be responsible for creating the summary report of
-all checks. If not givne, a default outputter is used.
+all checks. If not given, a default outputter is used.
 
 =item filter => hashref or arrayref or scalar
 
@@ -929,7 +928,7 @@ It reads configuration from a file and returns it as a hashref. The
 configuration is looked for in the given $filename or in a default
 configuration file name. The path to both given and default
 configuration file is resolved by rules defined in
-L<resolve_config_file()|resolve_config_file___filename_>. The default
+L<resolve_config_file()|"resolve_config_file_($filename)">. The default
 configuration file name is in
 C<$Monitor::Simple::DEFAULT_CONFIG_FILE>.
 
@@ -939,7 +938,7 @@ Return a hashref with configuration for a given service (identified by
 its $service_id). If such configuration cannot be found, a warning is
 issued and undef is returned. The service configuration is looked for
 in the given hashref $config containing the full configuration
-(usually obtained by L<get_config()|get_config____filename__>).
+(usually obtained by L<get_config()|"get_config_([$filename])">).
 
 =head2 Monitor::Simple::UserAgent
 
@@ -950,20 +949,20 @@ methods.
 =head3 head_or_exit ($service_id, $config)
 
 It makes the I<HTTP HEAD> test described in
-L<check_url.pl|plugin__check_url_pl> plugin. If everything okay it
+L<check_url.pl|"Plugin:_check-url.pl"> plugin. If everything okay it
 just returns. Otherwise, it exits with the Nagios-compliant reporting
 (see more about it in
-L<report_and_exit()|report_and_exit___service_id___config___exit_code___return_msg_>).
+L<report_and_exit()|"report_and_exit_($service_id,_$config,_$exit_code,_$return_msg)">).
 
 This method uses C<head-test> portion of this service configuration.
 
 =head3 post_or_exit ($service_id, $config)
 
 It makes the I<HTTP POST> test described in
-L<check_post.pl|plugin__check_post_pl> plugin. If everything okay it
+L<check_post.pl|"Plugin:_check-post.pl"> plugin. If everything okay it
 just returns. Otherwise, it exits with the Nagios-compliant reporting
 (see more about it in
-L<report_and_exit()|report_and_exit___service_id___config___exit_code___return_msg_>).
+L<report_and_exit()|"report_and_exit_($service_id,_$config,_$exit_code,_$return_msg)">).
 
 This method uses C<post-test> portion of this service configuration.
 
@@ -1107,13 +1106,13 @@ the log messages as defined by in Log::Log4Perl; default value being
 
 When writing a plugin or a notifier, this method is called for you
 automatically from the
-L<parse_plugin_args()|parse_plugin_args___default_service_id___args_>
-or L<parse_notifier_args()|parse_notifier_args___args_>.
+L<parse_plugin_args()|"parse_plugin_args_($default_service_id,_@args)">
+or L<parse_notifier_args()|"parse_notifier_args_(@args)">.
 
 =head3 get_logging_options
 
 It returns currently used logging options - in the same format as the
-same options are define in L<log_init()|log_init___logging_options_>.
+same options are define in L<log_init()|"log_init_($logging_options)">.
 
 =head2 Monitor::Simple::Utils
 
@@ -1142,7 +1141,7 @@ It executes an external program with the given arguments and
 (optionally) checks its STDOUT for the given content. If everything
 okay it just returns. Otherwise, it exits with the Nagios-compliant
 reporting (see more about it in
-L<report_and_exit()|report_and_exit___service_id___config___exit_code___return_msg_>).
+L<report_and_exit()|"report_and_exit_($service_id,_$config,_$exit_code,_$return_msg)">).
 
 This method uses C<prg-test> portion of this service configuration.
 
@@ -1219,7 +1218,7 @@ Martin Senger <martin.senger@gmail.com>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2011 by Martin Senger, CBRC-KAUST (Computational Biology Research Center - King Abdullah University of Science and Technology) All Rights Reserved..
+This software is copyright (c) 2012 by Martin Senger, CBRC-KAUST (Computational Biology Research Center - King Abdullah University of Science and Technology) All Rights Reserved.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

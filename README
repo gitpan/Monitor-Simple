@@ -2,7 +2,7 @@ NAME
     Monitor::Simple - Simple monitoring of applications and services
 
 VERSION
-    version 0.2.4
+    version 0.2.5
 
 SYNOPSIS
        # check services defined in 'my.cfg' and report to the STDOUT
@@ -672,7 +672,7 @@ MODULES and METHODS
 
     outputter => an instance of *Monitor::Simple::Output*
         This outputter will be responsible for creating the summary report
-        of all checks. If not givne, a default outputter is used.
+        of all checks. If not given, a default outputter is used.
 
     filter => hashref or arrayref or scalar
         If any filter given then it contains IDs of services that will be
@@ -941,9 +941,9 @@ AUTHOR
     Martin Senger <martin.senger@gmail.com>
 
 COPYRIGHT AND LICENSE
-    This software is copyright (c) 2011 by Martin Senger, CBRC-KAUST
+    This software is copyright (c) 2012 by Martin Senger, CBRC-KAUST
     (Computational Biology Research Center - King Abdullah University of
-    Science and Technology) All Rights Reserved..
+    Science and Technology) All Rights Reserved.
 
     This is free software; you can redistribute it and/or modify it under
     the same terms as the Perl 5 programming language system itself.

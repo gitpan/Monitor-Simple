@@ -18,20 +18,22 @@
 # Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 # Boston, MA 02111-1307, USA
 
+## no critic   # added by M.S.
+
 # Tell Perl what we need to use
 use strict;
 use Getopt::Std;
 
 use vars qw($opt_c $opt_f $opt_u $opt_w
-	    $free_memory $used_memory $total_memory
-	    $crit_level $warn_level
+            $free_memory $used_memory $total_memory
+            $crit_level $warn_level
             %exit_codes @memlist
             $percent $fmt_pct
             $verb_err $command_line);
 
 # Predefined exit codes for Nagios
 %exit_codes   = ('UNKNOWN' ,-1,
-		 'OK'      , 0,
+                 'OK'      , 0,
                  'WARNING' , 1,
                  'CRITICAL', 2,);
 

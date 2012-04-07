@@ -9,10 +9,7 @@
 # PODNAME: smonitor
 # -----------------------------------------------------------------
 
-package main;
-{
-  $main::VERSION = '0.2.4';
-}  # this is here to make Dist:Dzilla's PkgVersion happy
+package main;  # this is here to make Dist:Dzilla's PkgVersion happy
 
 use warnings;
 use strict;
@@ -20,6 +17,8 @@ use strict;
 use Data::Dumper;
 use Monitor::Simple;
 use Log::Log4perl qw(:easy);
+
+our $VERSION = '0.2.5'; # VERSION
 
 # -----------------------------------------------------------------
 # Command-line arguments and script usage
@@ -35,33 +34,33 @@ BEGIN {
 
     Getopt::Long::Configure ('no_ignore_case');
     GetOptions ( h                    => \$opt_h,
-		 help                 => \$opt_help,
-		 man                  => \$opt_m,
-		 version              => \$opt_v,
+                 help                 => \$opt_help,
+                 man                  => \$opt_m,
+                 version              => \$opt_v,
 
-		 # configuration
-		 'showcfg'            => \$opt_showcfg,
-		 'cfg|config=s'       => \$opt_config,
+                 # configuration
+                 'showcfg'            => \$opt_showcfg,
+                 'cfg|config=s'       => \$opt_config,
 
-		 # results
-		 'outfile=s'          => \$opt_outfile,
-		 'format=s'           => \$opt_format,
-		 'onlyerrs'           => \$opt_onlyerr,
-		 'cssurl=s'           => \$opt_cssurl,
+                 # results
+                 'outfile=s'          => \$opt_outfile,
+                 'format=s'           => \$opt_format,
+                 'onlyerrs'           => \$opt_onlyerr,
+                 'cssurl=s'           => \$opt_cssurl,
 
-		 # logging
-		 'logfile=s'          => \$opt_logfile,
-		 'loglevel=s'         => \$opt_loglevel,
-		 'logformat=s'        => \$opt_logformat,
-		 'debug'              => \$opt_debug,
+                 # logging
+                 'logfile=s'          => \$opt_logfile,
+                 'loglevel=s'         => \$opt_loglevel,
+                 'logformat=s'        => \$opt_logformat,
+                 'debug'              => \$opt_debug,
 
-		 # other options
-		 'npp=i'              => \$opt_npp,
-		 'lf'                 => \$opt_list_formats,
-		 'services|filters=s' => \@opt_filter,
-		 'nn|nonotif'         => \$opt_nonotif,
+                 # other options
+                 'npp=i'              => \$opt_npp,
+                 'lf'                 => \$opt_list_formats,
+                 'services|filters=s' => \@opt_filter,
+                 'nn|nonotif'         => \$opt_nonotif,
 
-	) or pod2usage (2);
+        ) or pod2usage (2);
     pod2usage (-verbose => 0, -exitval => 0) if $opt_h;
     pod2usage (-verbose => 1, -exitval => 0) if $opt_help;
     pod2usage (-verbose => 2, -exitval => 0) if $opt_m;
@@ -72,6 +71,7 @@ BEGIN {
 
 # -------------------- Show version and exit ----------------------
 if ($opt_v) {
+    ## no critic
     no strict;    # because the $VERSION will be added only when
     no warnings;  # the distribution is fully built up
     print "$VERSION\n";
@@ -86,8 +86,8 @@ $| = 1;  # flushing STDOUT
 # -----------------------------------------------------------------
 $opt_loglevel = 'debug' if $opt_debug;
 Monitor::Simple::Log->log_init ({ level  => $opt_loglevel,
-				file   => $opt_logfile,
-				layout => $opt_logformat });
+                                file   => $opt_logfile,
+                                layout => $opt_logformat });
 
 # -----------------------------------------------------------------
 # Find configuration telling us what will be monitored
@@ -106,7 +106,7 @@ if ($opt_showcfg) {
 if ($opt_list_formats) {
     my $formats = Monitor::Simple::Output->list_formats();
     foreach my $key (sort keys %$formats) {
-	print STDOUT "$key\t" . $formats->{$key} . "\n";
+        print STDOUT "$key\t" . $formats->{$key} . "\n";
     }
     exit(0);
 }
@@ -117,10 +117,10 @@ if ($opt_list_formats) {
 my $loop_args = {
     config_file => $config_file,
     outputter   => Monitor::Simple::Output->new (outfile  => $opt_outfile,
-						 onlyerr  => $opt_onlyerr,
-						 'format' => $opt_format,
-						 cssurl   => $opt_cssurl,
-						 config   => $config),
+                                                 onlyerr  => $opt_onlyerr,
+                                                 'format' => $opt_format,
+                                                 cssurl   => $opt_cssurl,
+                                                 config   => $config),
 };
 # maximum number of child processes in parallel
 $loop_args->{npp} = $opt_npp if $opt_npp;
@@ -144,7 +144,7 @@ smonitor - command-line tool for monitoring services
 
 =head1 VERSION
 
-version 0.2.4
+version 0.2.5
 
 =head1 SYNOPSIS
 
@@ -183,7 +183,7 @@ I<Monitor::Simple>; just type:
 =head1 OPTIONS
 
 The command-line arguments and options can be specified with single or
-double dash. Most of them can be abbreviated to the nearest un-biased
+double dash. Most of them can be abbreviated to the nearest unbiased
 length. They are case-sensitive.
 
 =head2 -cfg <config-file>
@@ -363,7 +363,7 @@ Martin Senger <martin.senger@gmail.com>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2011 by Martin Senger, CBRC-KAUST (Computational Biology Research Center - King Abdullah University of Science and Technology) All Rights Reserved..
+This software is copyright (c) 2012 by Martin Senger, CBRC-KAUST (Computational Biology Research Center - King Abdullah University of Science and Technology) All Rights Reserved.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

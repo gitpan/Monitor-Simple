@@ -6,21 +6,20 @@
 # ABSTRACT: See documentation in Monitor::Simple
 # PODNAME: Monitor::Simple::Output
 #-----------------------------------------------------------------
-
-package Monitor::Simple::Output;
-{
-  $Monitor::Simple::Output::VERSION = '0.2.4';
-}
 use warnings;
 use strict;
+
+package Monitor::Simple::Output;
 use Monitor::Simple;
 use Log::Log4perl qw(:easy);
+
+our $VERSION = '0.2.5'; # VERSION
 
 my @Headers = ('DATE', 'SERVICE', 'STATUS', 'MESSAGE');
 
 my $Formats = { tsv    => 'TAB-separated (good for machines)',
-		human  => 'Easier readable by humans',
-		html   => 'Formatted as an HTML document',
+                human  => 'Easier readable by humans',
+                html   => 'Formatted as an HTML document',
 };
 
 #-----------------------------------------------------------------
@@ -40,7 +39,7 @@ sub new {
         $self->{$key} = $args {$key};
     }
     LOGDIE ("outputter: Missing argument 'config'. Cannot do anything.\n")
-	unless $self->{config};
+        unless $self->{config};
 
     # assign some default values
     $self->{format} = 'human'  unless $self->{format};
@@ -48,21 +47,21 @@ sub new {
 
     # compute the longest service name (needed only for 'human' format)
     if ($self->{format} eq 'human') {
-	my $longest_name_len = length ($Headers[1]);
-	map {
-	    my $len = length ($_->{name} || $_->{id});
-	    $longest_name_len = $len if $len > $longest_name_len } @{ $self->{config}->{services} };
-	$self->{report_format} = "%-30s %-${longest_name_len}s  %6s  %s\n";
+        my $longest_name_len = length ($Headers[1]);
+        map {
+            my $len = length ($_->{name} || $_->{id});
+            $longest_name_len = $len if $len > $longest_name_len } @{ $self->{config}->{services} };
+        $self->{report_format} = "%-30s %-${longest_name_len}s  %6s  %s\n";
     }
 
     # prepare output
     if ($self->{outfile}) {
-	open ($self->{fhout}, '>', $self->{outfile})
-	    or LOGDIE ("Cannot open file '$self->{outfile}' for writing: $!\n");
-	close ($self->{fhout});
+        open ($self->{fhout}, '>', $self->{outfile})
+            or LOGDIE ("Cannot open file '$self->{outfile}' for writing: $!\n");
+        close ($self->{fhout});
     } else {
-	$self->{fhout} = *STDOUT;
-	my $oldfh = select ($self->{fhout}); $| = 1; select ($oldfh);  # turn autoflush on
+        $self->{fhout} = *STDOUT;
+        my $oldfh = select ($self->{fhout}); $| = 1; select ($oldfh);  # turn autoflush on
     }
 
     # done
@@ -85,13 +84,13 @@ sub list_formats {
 sub create_report {
     my ($self, $service_config, @fields) = @_;
     if ($self->{format} eq 'tsv') {
-	return join ("\t", @fields) . "\n";
+        return join ("\t", @fields) . "\n";
 
     } elsif ($self->{format} eq 'html') {
-	return $self->html_line ($service_config, @fields);
+        return $self->html_line ($service_config, @fields);
 
     } else {
-	return sprintf ($self->{report_format}, @fields);
+        return sprintf ($self->{report_format}, @fields);
     }
 }
 
@@ -99,11 +98,11 @@ sub html_header {
     my ($self, @fields) = @_;
     my ($link, $style);
     if ($self->{cssurl}) {
-	$link = qq{<link href="$self->{cssurl}" rel="stylesheet" type="text/css">};
-	$style = '';
+        $link = qq{<link href="$self->{cssurl}" rel="stylesheet" type="text/css">};
+        $style = '';
     } else {
-	$link = '';
-	$style = <<'END_OF_STYLE';
+        $link = '';
+        $style = <<'END_OF_STYLE';
 <style>
 .mon-line, .mon-header-line {
    vertical-align:text-top;
@@ -172,9 +171,9 @@ sub html_line {
     my $class_suffix = lc ($status);
     my $title = $service_config->{description};
     if ($title) {
-	$title = 'title="' . $self->escapeHTML ($title) . '"';
+        $title = 'title="' . $self->escapeHTML ($title) . '"';
     } else {
-	$title = '';
+        $title = '';
     }
     my $service_name = $self->escapeHTML ($fields[1]);
     my $message = $self->escapeHTML ($fields[3]);
@@ -202,21 +201,21 @@ sub escapeHTML {
     return $value;
 }
 
-#------------------------------------------------------------------ 
+#------------------------------------------------------------------
 # An atomic output, protected by file locking. All output goes through
 # here.
 # -----------------------------------------------------------------
 sub _out {
     my ($self, $msg) = @_;
     if ($self->{outfile}) {
-	local *DATA;
-	open (DATA, "+<", $self->{outfile})
-	    or LOGDIE "Cannot open " . $self->{outfile} . ": $!\n";
-	lock_file (*DATA);
-	print DATA $msg or LOGDIE ("Output missed: $msg");
-	close DATA;
+        local *DATA;
+        open (my $data, "+<", $self->{outfile})
+            or LOGDIE "Cannot open " . $self->{outfile} . ": $!\n";
+        lock_file ($data);
+        print $data $msg or LOGDIE ("Output missed: $msg");
+        close $data;
     } else {
-	print STDOUT $msg or LOGDIE ("Output missed: $msg");
+        print STDOUT $msg or LOGDIE ("Output missed: $msg");
     }
 }
 
@@ -229,18 +228,18 @@ sub header {
     return if $self->{format} eq 'tsv';   # no headers for machines
 
     if ($self->{outfile} or not $self->{onlyerr}) {
-	if ($header) {
-	    # print whatever header was sent here
-	    $self->_out ($header);
+        if ($header) {
+            # print whatever header was sent here
+            $self->_out ($header);
 
-	} else {
-	    # ...or make a default header (which depends on the format)
-	    if ($self->{format} eq 'html') {
-		$self->_out ($self->html_header (@Headers));
-	    } else {
-		$self->_out ($self->create_report ({}, @Headers));
-	    }
-	}
+        } else {
+            # ...or make a default header (which depends on the format)
+            if ($self->{format} eq 'html') {
+                $self->_out ($self->html_header (@Headers));
+            } else {
+                $self->_out ($self->create_report ({}, @Headers));
+            }
+        }
     }
 }
 
@@ -276,15 +275,15 @@ sub footer {
 sub out {
     my ($self, $service_id, $code, $msg) = @_;
     my $service_config =
-	( Monitor::Simple::Config->extract_service_config ($service_id, $self->{config}) ||
-	  { id   => $service_id, name => $service_id } );
+        ( Monitor::Simple::Config->extract_service_config ($service_id, $self->{config}) ||
+          { id   => $service_id, name => $service_id } );
     my $service_name = ($service_config->{name} or $service_config->{id});
     my $doc = $self->create_report ($service_config, scalar localtime(), $service_name, $code, $msg);
     if ($self->{outfile} or not $self->{onlyerr}) {
-	$self->_out ($doc);
+        $self->_out ($doc);
     }
     if ($code ne Monitor::Simple::RETURN_OK and $self->{onlyerr}) {
-	print STDOUT $doc or LOGDIE ("Output missed: $doc");
+        print STDOUT $doc or LOGDIE ("Output missed: $doc");
     }
 }
 
@@ -295,22 +294,11 @@ sub lock_file {
     seek ($fh, 0, SEEK_END) or LOGDIE ("Cannot seek output file with reports: $!\n");
 }
 
-# sub unlock_file {
-#     my ($fh) = @_;
-#     flock ($fh, LOCK_UN)
-# 	or LOGDIE ("Cannot unlock output file with reports: $!\n");
-# }
-
-# sub close {
-#     my ($self) = shift;
-#     close ($self->{fhout}) || LOGDIE ("Cannot close $self->{outfile}: $!\n")
-# 	if $self->{outfile};
-# }
-
-# sub DESTROY {
-#     my ($self) = shift;
-#     $self->close();
-# }
+sub unlock_file {
+    my ($fh) = @_;
+    flock ($fh, LOCK_UN)
+        or LOGDIE ("Cannot unlock output file with reports: $!\n");
+}
 
 1;
 
@@ -323,7 +311,7 @@ Monitor::Simple::Output - See documentation in Monitor::Simple
 
 =head1 VERSION
 
-version 0.2.4
+version 0.2.5
 
 =head1 AUTHOR
 
@@ -331,7 +319,7 @@ Martin Senger <martin.senger@gmail.com>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2011 by Martin Senger, CBRC-KAUST (Computational Biology Research Center - King Abdullah University of Science and Technology) All Rights Reserved..
+This software is copyright (c) 2012 by Martin Senger, CBRC-KAUST (Computational Biology Research Center - King Abdullah University of Science and Technology) All Rights Reserved.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

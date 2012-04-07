@@ -30,21 +30,21 @@ diag( "Testing the configuration" );
 {
     my $existing_file = File::Spec->catfile (test_file(), 'c1.empty');
     is (Monitor::Simple::Config->resolve_config_file ($existing_file),
-	$existing_file,
-	"Resolving file - ad a) failed");
+        $existing_file,
+        "Resolving file - ad a) failed");
     $ENV{$Monitor::Simple::Config::ENV_CONFIG_DIR} = File::Spec->catfile ($Bin, 'data');
     is (Monitor::Simple::Config->resolve_config_file ('c2.empty'),
-	File::Spec->catfile ($Bin, 'data', 'c2.empty'),
-	"Resolving file - ad b) failed");
+        File::Spec->catfile ($Bin, 'data', 'c2.empty'),
+        "Resolving file - ad b) failed");
     delete $ENV{$Monitor::Simple::Config::ENV_CONFIG_DIR};
     push (@INC, File::Spec->catfile ($Bin, 'data'));
     is (Monitor::Simple::Config->resolve_config_file ('c3.empty'),
-	File::Spec->catfile ($Bin, 'data', 'c3.empty'),
-	"Resolving file - ad d) failed");
+        File::Spec->catfile ($Bin, 'data', 'c3.empty'),
+        "Resolving file - ad d) failed");
     pop @INC;
     is (Monitor::Simple::Config->resolve_config_file ('non-existing'),
-	undef,
-	"Resolving file - ad e) failed");
+        undef,
+        "Resolving file - ad e) failed");
 }
 
 # bad XML
@@ -61,16 +61,16 @@ diag( "Testing the configuration" );
     my $errors = $@;
     ok ($errors, "There should be errors in '$bad_config_file'");
     my @error_msgs = (
-	"Service number 1 does not have an ID attribute",
-	"Service number 1 does not have any plugin section",
-	"Service 'Letter A' has a plugin without any 'command' attribute",
-	"Notifier number 1 in service 'Letter A' has no 'command' attribute",
-	"Service 'Letter B' has more than one plugin tag",
-	"General notifier number 1 has no 'command' attribute",
-	);
+        "Service number 1 does not have an ID attribute",
+        "Service number 1 does not have any plugin section",
+        "Service 'Letter A' has a plugin without any 'command' attribute",
+        "Notifier number 1 in service 'Letter A' has no 'command' attribute",
+        "Service 'Letter B' has more than one plugin tag",
+        "General notifier number 1 has no 'command' attribute",
+        );
     foreach my $msg (@error_msgs) {
-	my $qmsg = "\Q$msg";
-	ok ($errors =~ m{$qmsg}, "Missing error: $msg");
+        my $qmsg = "\Q$msg";
+        ok ($errors =~ m{$qmsg}, "Missing error: $msg");
     }
 }
 
@@ -105,8 +105,8 @@ ok ($config->{general}->{'notifiers-dir'} =~ m{Monitor/Simple/notifiers$},
     my $service = Monitor::Simple::Config->extract_service_config ($service_id, $config);
     ok ($service, "Missing service configuration for service '$service_id'");
     is ($service->{name},
-	$service_id,
-	"Bad default value for service name");
+        $service_id,
+        "Bad default value for service name");
 }
 
 # section with an individual service
@@ -128,25 +128,25 @@ ok ($config->{general}->{'notifiers-dir'} =~ m{Monitor/Simple/notifiers$},
     my $service = Monitor::Simple::Config->extract_service_config ($service_id, $config);
     ok ($service, "Configuration for service '$service_id'");
     is ($service->{name},
-	'<Moderated> "exit"',
-	"Service name with unusual chars");
+        '<Moderated> "exit"',
+        "Service name with unusual chars");
 }
 {
     my $service_id = 's1';
     my $service = Monitor::Simple::Config->extract_service_config ($service_id, $config);
     ok ($service, "Configuration for service '$service_id'");
     is (ref ($service->{plugin}->{'head-test'}),
-	'ARRAY',
-	"head-test should be an arrayref");
+        'ARRAY',
+        "head-test should be an arrayref");
     is (ref ($service->{plugin}->{'get-test'}),
-	'ARRAY',
-	"get-test should be an arrayref");
+        'ARRAY',
+        "get-test should be an arrayref");
     is (ref ($service->{plugin}->{'post-test'}),
-	'ARRAY',
-	"post-test should be an arrayref");
+        'ARRAY',
+        "post-test should be an arrayref");
     is (ref ($service->{plugin}->{'get-test'}->[0]->{response}->{contains}),
-	'ARRAY',
-	"response/contains should be an arrayref");
+        'ARRAY',
+        "response/contains should be an arrayref");
 }
 
 # creation of the arguments for plugins
@@ -161,14 +161,14 @@ ok ($config->{general}->{'notifiers-dir'} =~ m{Monitor/Simple/notifiers$},
     my @args = Monitor::Simple::Config->create_plugin_args ('config.file', $config, 's1');
     is (scalar @args, 4, "Number of arguments for a standard plugin");
     is_deeply (\@args,
-	       [qw(-cfg config.file -service s1)],
-	       "Create standard plugin arguments");
+               [qw(-cfg config.file -service s1)],
+               "Create standard plugin arguments");
 }
 {
     my @args = Monitor::Simple::Config->create_plugin_args ('whatever', $config, 'copy');
     is_deeply (\@args,
-	       ['2', 'This is an <"artificial"> error'],
-	       "Create user-defined plugin arguments");
+               ['2', 'This is an <"artificial"> error'],
+               "Create user-defined plugin arguments");
 }
 
 

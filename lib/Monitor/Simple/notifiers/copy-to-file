@@ -36,14 +36,14 @@ my ($service_id, $msgfile) =
 my ($output_file, $login_name);
 Getopt::Long::Configure ('no_ignore_case', 'pass_through');
 GetOptionsFromArray (\@ARGV,
-		     'login=s'   => \$login_name,
-		     'file=s'    => \$output_file,
+                     'login=s'   => \$login_name,
+                     'file=s'    => \$output_file,
     );
 LOGDIE ("Missing parameter '-file'\n")
     unless $output_file;
 
 # input file with the notification message
-open (MSG, '<', $msgfile)
+open (my $msg, '<', $msgfile)
     or LOGDIE ("Cannot open file '$msgfile' with the notification message: $!\n");
 
 # output
@@ -51,24 +51,24 @@ if ($login_name) {
     # file on a remote server (using ssh)
     my @command = ('ssh', $login_name, 'cat', '>>', "'$output_file'");
     DEBUG ("[$0] Command: " . join (' ', @command));
-    open (OUT, '|-', @command);
-    while (<MSG>) {
-	print OUT $_;
+    open (my $out, '|-', @command);
+    while (<$msg>) {
+        print $out $_;
     }
+    close $out;
 
 } else {
     # local file
-    open (OUT, '>>', $output_file)
-	or LOGDIE ("Cannot open file '$output_file' for writting: $!\n");
-    while (<MSG>) {
-	&Monitor::Simple::Output::lock (*OUT);
-	print OUT $_;
-	&Monitor::Simple::Output::unlock (*OUT);
+    open ($out, '>>', $output_file)
+        or LOGDIE ("Cannot open file '$output_file' for writting: $!\n");
+    while (<$msg>) {
+        &Monitor::Simple::Output::lock_file ($out);
+        print $out $_;
+        &Monitor::Simple::Output::unlock_file ($out);
     }
+    close $out;
 }
-
-close OUT;
-close MSG;
+close $msg;
 
 INFO ("[$0] Appended to '$output_file'" . ($login_name ? " [at $login_name]." : '.'));
 

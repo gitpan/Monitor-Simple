@@ -36,26 +36,26 @@ my $list_of_emails = join (',', @$emails);
 my ($login_name);
 Getopt::Long::Configure ('no_ignore_case', 'pass_through');
 GetOptionsFromArray (\@ARGV,
-		     'login=s' => \$login_name,
+                     'login=s' => \$login_name,
     );
 LOGDIE ("Missing parameter '-login' with hostname or user\@hostname\n")
     unless $login_name;
 
 # input file with the notification message
-open (MSG, '<', $msgfile)
+open (my $msg, '<', $msgfile)
     or LOGDIE ("Cannot open file '$msgfile' with the notification message: $!\n");
 
 # output stream to the 'ssh' command
 my @command = ('ssh', $login_name, 'mail', '-s', "'$subject'", $list_of_emails);
 DEBUG ("[$0] Command: " . join (' ', @command));
-open (SSH, '|-', @command);
+open (my $ssh, '|-', @command);
 
 # send the message
-while (<MSG>) {
-    print SSH $_;
+while (<$msg>) {
+    print $ssh $_;
 }
 close SSH;
-close MSG;
+close $msg;
 
 INFO ("[$0] $subject: $list_of_emails");
 

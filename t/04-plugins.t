@@ -1,5 +1,17 @@
 #!perl -w
 
+BEGIN {
+    # skip all these tests if the default perl is not the same as the
+    # perl used to start this test (because in such cases there may be
+    # missing Perl modules during invocation the external plugins)
+    use File::Which;
+    my $default_perl = which ('perl');
+    unless ($default_perl and $default_perl eq $^X) {
+        require Test::More;
+        Test::More::plan (skip_all => 'default perl differs from the one used for testing');
+    }
+}
+
 #use Test::More qw(no_plan);
 use Test::More tests => 23;
 
@@ -50,31 +62,31 @@ sub do_checking {
 #    diag (join ("\n", map { chomp; $_ } @lines));
     is (scalar @lines, $expected_lines, "Number of parallel service checks [$title]");
     foreach my $line (@lines) {
-	my @fields = split (/\t/, $line, 4);
-	is (scalar @fields, 4, "Found only partional line [$title]: $line");
+        my @fields = split (/\t/, $line, 4);
+        is (scalar @fields, 4, "Found only partional line [$title]: $line");
     }
 }
 
 # report and exit (one by one); filter as SCALAR
 {
     my $report_tests = {
-	ok       => 0,
-	warning  => 1,
-	critical => 2,
-	unknown  => 3,
+        ok       => 0,
+        warning  => 1,
+        critical => 2,
+        unknown  => 3,
     };
-    
+
     foreach my $service (keys %$report_tests) {
-	my ($fh, $filename) = tempfile();
-	my $args = {
-	    config_file => $config_file,
-	    filter      => $service,
-	    outputter   => Monitor::Simple::Output->new (outfile  => $filename,
-							 'format' => 'tsv',
-							 config   => $config),
-	};
-	do_checking ("In SCALAR [$service]:", $args, $filename, 1);
-	unlink $filename;
+        my ($fh, $filename) = tempfile();
+        my $args = {
+            config_file => $config_file,
+            filter      => $service,
+            outputter   => Monitor::Simple::Output->new (outfile  => $filename,
+                                                         'format' => 'tsv',
+                                                         config   => $config),
+        };
+        do_checking ("In SCALAR [$service]:", $args, $filename, 1);
+        unlink $filename;
     }
 }
 
@@ -82,17 +94,17 @@ sub do_checking {
 {
     my ($fh, $filename) = tempfile();
     my $filters = {
-    	ok       => 0,
-    	warning  => 1,
-    	critical => 2,
-    	unknown  => 3,
+        ok       => 0,
+        warning  => 1,
+        critical => 2,
+        unknown  => 3,
     };
     my $args = {
-	config_file => $config_file,
-	filter      => $filters,
-	outputter   => Monitor::Simple::Output->new (outfile  => $filename,
-						     'format' => 'tsv',
-						     config   => $config),
+        config_file => $config_file,
+        filter      => $filters,
+        outputter   => Monitor::Simple::Output->new (outfile  => $filename,
+                                                     'format' => 'tsv',
+                                                     config   => $config),
     };
     do_checking ('In HASH:', $args, $filename, 4);
     unlink $filename;
@@ -103,11 +115,11 @@ sub do_checking {
     my ($fh, $filename) = tempfile();
     my $filters = ['ok', 'warning', 'critical', 'unknown'];
     my $args = {
-	config_file => $config_file,
-	filter      => $filters,
-	outputter   => Monitor::Simple::Output->new (outfile  => $filename,
-						     'format' => 'tsv',
-						     config   => $config),
+        config_file => $config_file,
+        filter      => $filters,
+        outputter   => Monitor::Simple::Output->new (outfile  => $filename,
+                                                     'format' => 'tsv',
+                                                     config   => $config),
     };
     do_checking ('In ARRAY:', $args, $filename, 4);
     unlink $filename;
@@ -117,16 +129,16 @@ sub do_checking {
 {
     my ($fh, $filename) = tempfile();
     my $filters = {
-    	prg     => 0,
-    	prgbad  => 3,
+        prg     => 0,
+        prgbad  => 3,
     };
     my $outputter = Monitor::Simple::Output->new (outfile  => $filename,
-						  'format' => 'tsv',
-						  config   => $config);
+                                                  'format' => 'tsv',
+                                                  config   => $config);
     my $args = {
-	config_file => $config_file,
-	filter      => $filters,
-	outputter   => $outputter,
+        config_file => $config_file,
+        filter      => $filters,
+        outputter   => $outputter,
     };
     do_checking ('In PRG:', $args, $filename, 2);
     unlink $filename;

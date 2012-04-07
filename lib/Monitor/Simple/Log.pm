@@ -8,13 +8,12 @@
 #-----------------------------------------------------------------
 
 package Monitor::Simple::Log;
-{
-  $Monitor::Simple::Log::VERSION = '0.2.4';
-}
 
 use warnings;
 use strict;
 use Log::Log4perl qw(:easy);
+
+our $VERSION = '0.2.5'; # VERSION
 
 my $default_loglevel  = 'INFO';
 my $default_logfile   = 'smonitor.log';
@@ -37,8 +36,8 @@ sub get_logging_options {
 # undefined). For example:
 #
 # Monitor::Simple::Log->log_init ({ level  => $opt_loglevel,
-#	 		          file   => $opt_logfile,
-#			          layout => $opt_logformat });
+#                                 file   => $opt_logfile,
+#                                 layout => $opt_logformat });
 # -----------------------------------------------------------------
 sub log_init {
     my ($self, $args) = @_;
@@ -49,10 +48,10 @@ sub log_init {
     # log level
     my $opt_loglevel = $args->{level};
     if ($opt_loglevel) {
-	my $level = Log::Log4perl::Level::to_priority (uc ($opt_loglevel));
-	$logger_conf->{level} = $level;
+        my $level = Log::Log4perl::Level::to_priority (uc ($opt_loglevel));
+        $logger_conf->{level} = $level;
     } else {
-	$logger_conf->{level} = Log::Log4perl::Level::to_priority ($default_loglevel);
+        $logger_conf->{level} = Log::Log4perl::Level::to_priority ($default_loglevel);
     }
 
     # log file
@@ -60,7 +59,7 @@ sub log_init {
     $opt_logfile ||= $default_logfile;
     $opt_logfile =~ s{^[><]+}{};   # I had problems when '>' was there; it created binary log file (TBD?)
     if ($opt_logfile ne 'STDOUT' and $opt_logfile ne 'STDERR' and $opt_logfile !~ m{^>}) {
-	$opt_logfile = ">>$opt_logfile";
+        $opt_logfile = ">>$opt_logfile";
     }
     $logger_conf->{file} = $opt_logfile;
 
@@ -97,7 +96,7 @@ Monitor::Simple::Log - See documentation in Monitor::Simple
 
 =head1 VERSION
 
-version 0.2.4
+version 0.2.5
 
 =head1 AUTHOR
 
@@ -105,7 +104,7 @@ Martin Senger <martin.senger@gmail.com>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2011 by Martin Senger, CBRC-KAUST (Computational Biology Research Center - King Abdullah University of Science and Technology) All Rights Reserved..
+This software is copyright (c) 2012 by Martin Senger, CBRC-KAUST (Computational Biology Research Center - King Abdullah University of Science and Technology) All Rights Reserved.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

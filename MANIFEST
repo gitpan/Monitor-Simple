@@ -8,6 +8,8 @@ Makefile.PL
 README
 bin/smonitor
 dist.ini
+docs/Monitor-Simple.html
+docs/smonitor.html
 lib/Monitor/Simple.pm
 lib/Monitor/Simple/Config.pm
 lib/Monitor/Simple/Log.pm
@@ -32,12 +34,15 @@ lib/Monitor/Simple/plugins/check-url.pl
 lib/Monitor/Simple/plugins/check_mem.pl
 lib/Monitor/Simple/plugins/copy-message.pl
 lib/Monitor/Simple/plugins/get-date.pl
+t/00-compile.t
 t/00-load.t
 t/01-config.t
 t/02-notifier.t
 t/03-utils.t
 t/04-plugins.t
 t/05-output.t
+t/author-critic.t
+t/author-pod-spell.t
 t/data/bad-config.xml
 t/data/bad.xml
 t/data/c1.empty
@@ -46,4 +51,7 @@ t/data/c3.empty
 t/data/config.xml
 t/data/notifiers.xml
 t/data/plugins.xml
+t/release-distmeta.t
 t/release-eol.t
+t/release-no-tabs.t
+t/release-pod-syntax.t

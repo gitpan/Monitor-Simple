@@ -44,7 +44,7 @@ diag( "Testing utilities" );
     my @result = Monitor::Simple::Utils->parse_notifier_args (['-service', 's1', '-msg', 'file', '-emails', 'address']);
     is_deeply (\@result, [ 's1', 'file', [ 'address' ] ], "Parse notifier arguments 1");
     @result = Monitor::Simple::Utils->parse_notifier_args (['-service', 's1', '-msg', 'file']);
-    is_deeply (\@result, [ 's1',	'file',	[] ], "Parse notifier arguments 2");
+    is_deeply (\@result, [ 's1',        'file', [] ], "Parse notifier arguments 2");
 }
 
 # process exit

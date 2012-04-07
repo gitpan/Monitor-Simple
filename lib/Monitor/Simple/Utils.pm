@@ -7,16 +7,16 @@
 # PODNAME: Monitor::Simple::Utils
 #-----------------------------------------------------------------
 
-package Monitor::Simple::Utils;
-{
-  $Monitor::Simple::Utils::VERSION = '0.2.4';
-}
 use warnings;
 use strict;
+package Monitor::Simple::Utils;
+
 use Getopt::Long 2.38 qw(GetOptionsFromArray);
 use Monitor::Simple;
 use IO::CaptureOutput qw(capture_exec);
 use Log::Log4perl qw(:easy);
+
+our $VERSION = '0.2.5'; # VERSION
 
 #-----------------------------------------------------------------
 # Read plugin's command-line arguments @args.
@@ -32,18 +32,18 @@ sub parse_plugin_args {
     my ($opt_logfile, $opt_loglevel, $opt_logformat);
     Getopt::Long::Configure ('no_ignore_case');
     GetOptionsFromArray (\@args,
-			 'id|service=s'   => \$opt_service,
-			 'cfg|config=s'   => \$opt_config,
+                         'id|service=s'   => \$opt_service,
+                         'cfg|config=s'   => \$opt_config,
 
-			 # logging
-			 'logfile=s'      => \$opt_logfile,
-			 'loglevel=s'     => \$opt_loglevel,
-			 'logformat=s'    => \$opt_logformat,
-	);
+                         # logging
+                         'logfile=s'      => \$opt_logfile,
+                         'loglevel=s'     => \$opt_loglevel,
+                         'logformat=s'    => \$opt_logformat,
+        );
     $opt_service = $default_service_id unless $opt_service;
     Monitor::Simple::Log->log_init ({ level  => $opt_loglevel,
-				    file   => $opt_logfile,
-				    layout => $opt_logformat });
+                                    file   => $opt_logfile,
+                                    layout => $opt_logformat });
 
     return ($opt_config, $opt_service);
 }
@@ -74,18 +74,18 @@ sub process_exit {
     my ($self, $command, $exit_code, $stdout) = @_;
 
     if ($exit_code == -1) {
-	# external command was not executed, at all
-	return (-1, "Failed to execute plugin '$command'");
+        # external command was not executed, at all
+        return (-1, "Failed to execute plugin '$command'");
 
     } elsif ($exit_code & 127) {
-	# external command was killed by a signal
-	return (2, sprintf ("Plugin '$command' died with signal %d, %s coredump",
-			    ($exit_code & 127),  ($exit_code & 128) ? 'with' : 'without'));
+        # external command was killed by a signal
+        return (2, sprintf ("Plugin '$command' died with signal %d, %s coredump",
+                            ($exit_code & 127),  ($exit_code & 128) ? 'with' : 'without'));
 
     } else {
-	# external command finished (good or bad, it depends on its exit code)
-	chomp $stdout;
-	return ( ($exit_code >> 8), $stdout);
+        # external command finished (good or bad, it depends on its exit code)
+        chomp $stdout;
+        return ( ($exit_code >> 8), $stdout);
     }
 }
 
@@ -106,18 +106,18 @@ sub parse_notifier_args {
     my ($opt_logfile, $opt_loglevel, $opt_logformat);
     Getopt::Long::Configure ('no_ignore_case', 'pass_through');
     GetOptionsFromArray ($args,
-			 'service=s'    => \$opt_service,
-			 'msg=s'        => \$opt_msgfile,
-			 'emails=s'     => \@opt_emails,
+                         'service=s'    => \$opt_service,
+                         'msg=s'        => \$opt_msgfile,
+                         'emails=s'     => \@opt_emails,
 
-			 # logging
-			 'logfile=s'      => \$opt_logfile,
-			 'loglevel=s'     => \$opt_loglevel,
-			 'logformat=s'    => \$opt_logformat,
-	);
+                         # logging
+                         'logfile=s'      => \$opt_logfile,
+                         'loglevel=s'     => \$opt_loglevel,
+                         'logformat=s'    => \$opt_logformat,
+        );
     Monitor::Simple::Log->log_init ({ level  => $opt_loglevel,
-				    file   => $opt_logfile,
-				    layout => $opt_logformat });
+                                    file   => $opt_logfile,
+                                    layout => $opt_logformat });
 
     @opt_emails = split (m{\s*,\s*}, join (',', @opt_emails));
 
@@ -169,110 +169,110 @@ sub exec_or_exit {
 
     # warn (and exit) if the test cannot be executed
     unless (exists $config->{plugin}->{'prg-test'}) {
-	# a warning: test ignored
-	Monitor::Simple::Utils->report_and_exit ($service_id, $full_config,
-					       Monitor::Simple::RETURN_WARNING,
-					       'PRG test(s) ignored');
+        # a warning: test ignored
+        Monitor::Simple::Utils->report_and_exit ($service_id, $full_config,
+                                               Monitor::Simple::RETURN_WARNING,
+                                               'PRG test(s) ignored');
     }
     foreach my $prgtest (@{ $config->{plugin}->{'prg-test'} }) {
-	unless ($prgtest->{program}) {
-	    # a warning: test cannot be executed
-	    Monitor::Simple::Utils->report_and_exit ($service_id, $full_config,
-						   Monitor::Simple::RETURN_WARNING,
-						   "PRG test cannot be executed (missing 'program' parameter)");
-	}
-	# building a command-line
-	my @command = ($prgtest->{program});
-	if (defined $prgtest->{args}) {
-	    foreach my $arg (@{ $prgtest->{args} }) {
-		push (@command, $arg) if defined $arg;  # ignoring empty arguments
-	    }
-	}
+        unless ($prgtest->{program}) {
+            # a warning: test cannot be executed
+            Monitor::Simple::Utils->report_and_exit ($service_id, $full_config,
+                                                   Monitor::Simple::RETURN_WARNING,
+                                                   "PRG test cannot be executed (missing 'program' parameter)");
+        }
+        # building a command-line
+        my @command = ($prgtest->{program});
+        if (defined $prgtest->{args}) {
+            foreach my $arg (@{ $prgtest->{args} }) {
+                push (@command, $arg) if defined $arg;  # ignoring empty arguments
+            }
+        }
 
-	# prepare for timeout (zero means no timeout)
-	my $timeout = $prgtest->{timeout} || 0;
-	if (!$self->is_integer ($timeout)) {
-	    Monitor::Simple::Utils->report_and_exit ($service_id, $full_config,
-						     Monitor::Simple::RETURN_WARNING,
-						     'PRG test cannot be executed (a non-integer value in timeout)');
-	}
-	$timeout = 0 unless $timeout > 0;
+        # prepare for timeout (zero means no timeout)
+        my $timeout = $prgtest->{timeout} || 0;
+        if (!$self->is_integer ($timeout)) {
+            Monitor::Simple::Utils->report_and_exit ($service_id, $full_config,
+                                                     Monitor::Simple::RETURN_WARNING,
+                                                     'PRG test cannot be executed (a non-integer value in timeout)');
+        }
+        $timeout = 0 unless $timeout > 0;
 
-	# call the external program
-	DEBUG ("Executing: " . join (' ', @command));
-	my ($stdout, $stderr, $success, $exit_code);
+        # call the external program
+        DEBUG ("Executing: " . join (' ', @command));
+        my ($stdout, $stderr, $success, $exit_code);
 
-	if ($timeout) {
-	    eval {
-		local $SIG{ALRM} = sub { die "alarm\n" };
-		alarm $timeout;
-		($stdout, $stderr, $success, $exit_code) = capture_exec (@command);
-		alarm 0;
-	    };
-	    if ($@) {
-		if ($@ eq "alarm\n") {
-		    Monitor::Simple::Utils->report_and_exit ($service_id, $full_config,
-							     Monitor::Simple::RETURN_WARNING,
-							     "Timeout after waiting for $timeout seconds");
-		} else {
-		    Monitor::Simple::Utils->report_and_exit ($service_id, $full_config,
-							     Monitor::Simple::RETURN_UNKNOWN,
-							     $@);
-		}
-	    }
+        if ($timeout) {
+            eval {
+                local $SIG{ALRM} = sub { die "alarm\n" };
+                alarm $timeout;
+                ($stdout, $stderr, $success, $exit_code) = capture_exec (@command);
+                alarm 0;
+            };
+            if ($@) {
+                if ($@ eq "alarm\n") {
+                    Monitor::Simple::Utils->report_and_exit ($service_id, $full_config,
+                                                             Monitor::Simple::RETURN_WARNING,
+                                                             "Timeout after waiting for $timeout seconds");
+                } else {
+                    Monitor::Simple::Utils->report_and_exit ($service_id, $full_config,
+                                                             Monitor::Simple::RETURN_UNKNOWN,
+                                                             $@);
+                }
+            }
 
-	} else {
-	    ($stdout, $stderr, $success, $exit_code) = capture_exec (@command);
-	}
+        } else {
+            ($stdout, $stderr, $success, $exit_code) = capture_exec (@command);
+        }
 
-	if ($stderr) {
-	    Monitor::Simple::Utils->report_and_exit ($service_id, $full_config,
-						   Monitor::Simple::RETURN_UNKNOWN,
-						   $stderr);
-	}
-	my ($code, $msg) = Monitor::Simple::Utils->process_exit ($command[0], $exit_code, $stdout);
-	unless ($code == 0) {
-	    Monitor::Simple::Utils->report_and_exit ($service_id, $full_config,
-						   Monitor::Simple::RETURN_CRITICAL,
-						   $msg);
-	}
+        if ($stderr) {
+            Monitor::Simple::Utils->report_and_exit ($service_id, $full_config,
+                                                   Monitor::Simple::RETURN_UNKNOWN,
+                                                   $stderr);
+        }
+        my ($code, $msg) = Monitor::Simple::Utils->process_exit ($command[0], $exit_code, $stdout);
+        unless ($code == 0) {
+            Monitor::Simple::Utils->report_and_exit ($service_id, $full_config,
+                                                   Monitor::Simple::RETURN_CRITICAL,
+                                                   $msg);
+        }
 
-	# check the response
-	if (exists $prgtest->{stdout}) {
+        # check the response
+        if (exists $prgtest->{stdout}) {
 
-	    # check for emptyness (have we got anything?)
-	    if (exists $prgtest->{stdout}->{'not-empty'}) {
-		unless ($msg) {
-		    Monitor::Simple::Utils->report_and_exit ($service_id, $full_config,
-							   Monitor::Simple::RETURN_WARNING,
-							   "Returned content is empty");
-		}
-	    }
+            # check for emptyness (have we got anything?)
+            if (exists $prgtest->{stdout}->{'not-empty'}) {
+                unless ($msg) {
+                    Monitor::Simple::Utils->report_and_exit ($service_id, $full_config,
+                                                           Monitor::Simple::RETURN_WARNING,
+                                                           "Returned content is empty");
+                }
+            }
 
-	    # have we got an expected content?
-	    my $expected = $prgtest->{stdout}->{contains};
-	    if (defined $expected) {
-		foreach my $content (@$expected) {
-		    my $quoted = quotemeta ($content);
-		    if ($msg !~ m{$quoted}) {
-			Monitor::Simple::Utils->report_and_exit ($service_id, $full_config,
-							       Monitor::Simple::RETURN_WARNING,
-							       "Returned content does not contain: $content");
-		    }
-		}
-	    }
+            # have we got an expected content?
+            my $expected = $prgtest->{stdout}->{contains};
+            if (defined $expected) {
+                foreach my $content (@$expected) {
+                    my $quoted = quotemeta ($content);
+                    if ($msg !~ m{$quoted}) {
+                        Monitor::Simple::Utils->report_and_exit ($service_id, $full_config,
+                                                               Monitor::Simple::RETURN_WARNING,
+                                                               "Returned content does not contain: $content");
+                    }
+                }
+            }
 
-	    # check for numeric response
-	    if (exists $prgtest->{stdout}->{'is-integer'}) {
-		if ($msg !~ m{\s*\d+\s*}) {
-		    $msg =~ s{^\s*|\s*$}{}g;
-		    Monitor::Simple::Utils->report_and_exit ($service_id, $full_config,
-							   Monitor::Simple::RETURN_WARNING,
-							   "Returned content '$msg' is not an integer");
-		}
-	    }
+            # check for numeric response
+            if (exists $prgtest->{stdout}->{'is-integer'}) {
+                if ($msg !~ m{\s*\d+\s*}) {
+                    $msg =~ s{^\s*|\s*$}{}g;
+                    Monitor::Simple::Utils->report_and_exit ($service_id, $full_config,
+                                                           Monitor::Simple::RETURN_WARNING,
+                                                           "Returned content '$msg' is not an integer");
+                }
+            }
 
-	}
+        }
     }
 
     # everything is okay
@@ -297,10 +297,10 @@ sub service_config_or_exit {
 
     # warn (and exit) if the service is unknown to the configuration
     unless ($config) {
-	# a warning: test ignored
-	$self->report_and_exit ($service_id, $full_config,
-				Monitor::Simple::RETURN_WARNING,
-				"Service '$service_id' unknown. Test(s) ignored.");
+        # a warning: test ignored
+        $self->report_and_exit ($service_id, $full_config,
+                                Monitor::Simple::RETURN_WARNING,
+                                "Service '$service_id' unknown. Test(s) ignored.");
     }
     return $config;
 }
@@ -317,7 +317,7 @@ Monitor::Simple::Utils - See documentation in Monitor::Simple
 
 =head1 VERSION
 
-version 0.2.4
+version 0.2.5
 
 =head1 AUTHOR
 
@@ -325,7 +325,7 @@ Martin Senger <martin.senger@gmail.com>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2011 by Martin Senger, CBRC-KAUST (Computational Biology Research Center - King Abdullah University of Science and Technology) All Rights Reserved..
+This software is copyright (c) 2012 by Martin Senger, CBRC-KAUST (Computational Biology Research Center - King Abdullah University of Science and Technology) All Rights Reserved.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
