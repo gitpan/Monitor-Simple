@@ -17,7 +17,7 @@ use File::Basename;
 use Monitor::Simple;
 use Log::Log4perl qw(:easy);
 
-our $VERSION = '0.2.6'; # VERSION
+our $VERSION = '0.2.7'; # VERSION
 
 our $DEFAULT_CONFIG_FILE = 'monitor-simple-cfg.xml';
 our $ENV_CONFIG_DIR = 'MONITOR_SIMPLE_CFG_DIR';
@@ -222,7 +222,7 @@ Monitor::Simple::Config - See documentation in Monitor::Simple
 
 =head1 VERSION
 
-version 0.2.6
+version 0.2.7
 
 =head1 AUTHOR
 

@@ -6,6 +6,7 @@ META.json
 META.yml
 Makefile.PL
 README
+README.md
 bin/smonitor
 docs/Monitor-Simple.html
 docs/smonitor.html
@@ -32,6 +33,7 @@ lib/Monitor/Simple/plugins/check-post.pl
 lib/Monitor/Simple/plugins/check-prg.pl
 lib/Monitor/Simple/plugins/check-url.pl
 lib/Monitor/Simple/plugins/check_mem.pl
+lib/Monitor/Simple/plugins/check_mem2.pl
 lib/Monitor/Simple/plugins/copy-message.pl
 lib/Monitor/Simple/plugins/get-date.pl
 t/00-compile.t

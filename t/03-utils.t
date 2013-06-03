@@ -30,13 +30,13 @@ diag( "Testing utilities" );
 {
     my $config_file = File::Spec->catfile (test_file(), 'config.xml');
     my @result = Monitor::Simple::Utils->parse_plugin_args ('default', '-cfg', $config_file, '-service', 's1');
-    is_deeply (\@result, [ 't/data/config.xml', 's1' ], "Parse plugin arguments 1");
+    is_deeply (\@result, [ $config_file, 's1' ], "Parse plugin arguments 1");
     @result = Monitor::Simple::Utils->parse_plugin_args (undef, '-cfg', $config_file, '-service', 's1');
-    is_deeply (\@result, [ 't/data/config.xml', 's1' ], "Parse plugin arguments 2");
+    is_deeply (\@result, [ $config_file, 's1' ], "Parse plugin arguments 2");
     @result = Monitor::Simple::Utils->parse_plugin_args ('s1', '-cfg', $config_file);
-    is_deeply (\@result, [ 't/data/config.xml', 's1' ], "Parse plugin arguments 3");
+    is_deeply (\@result, [ $config_file, 's1' ], "Parse plugin arguments 3");
     @result = Monitor::Simple::Utils->parse_plugin_args (undef, '-cfg', $config_file);
-    is_deeply (\@result, [ 't/data/config.xml', undef ], "Parse plugin arguments 4");
+    is_deeply (\@result, [ $config_file, undef ], "Parse plugin arguments 4");
 }
 
 # parse notifier's args

@@ -64,7 +64,7 @@
       },
       "homepage" : "http://search.cpan.org/dist/Monitor-Simple"
    },
-   "version" : "0.2.6",
+   "version" : "0.2.7",
    "x_Dist_Zilla" : {
       "perl" : {
          "version" : "5.014002"

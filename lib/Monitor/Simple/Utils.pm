@@ -16,7 +16,7 @@ use Monitor::Simple;
 use IO::CaptureOutput qw(capture_exec);
 use Log::Log4perl qw(:easy);
 
-our $VERSION = '0.2.6'; # VERSION
+our $VERSION = '0.2.7'; # VERSION
 
 #-----------------------------------------------------------------
 # Read plugin's command-line arguments @args.
@@ -317,7 +317,7 @@ Monitor::Simple::Utils - See documentation in Monitor::Simple
 
 =head1 VERSION
 
-version 0.2.6
+version 0.2.7
 
 =head1 AUTHOR
 

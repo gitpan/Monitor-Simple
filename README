@@ -2,7 +2,7 @@ NAME
     Monitor::Simple - Simple monitoring of applications and services
 
 VERSION
-    version 0.2.6
+    version 0.2.7
 
 SYNOPSIS
        # check services defined in 'my.cfg' and report to the STDOUT
@@ -893,15 +893,9 @@ MODULES and METHODS
     any found in $args) to set the logging system. Read about possible
     arguments in $args in "Notifiers".
 
-AUTHOR
-    Martin Senger, "<martin.senger at gmail.com>"
-
 BUGS
-    Please report any bugs or feature requests to "bug-monitor-simple at
-    rt.cpan.org", or through the web interface at
-    <http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Monitor-Simple>. I will
-    be notified, and then you'll automatically be notified of progress on
-    your bug as I make changes.
+    Please report any bugs or feature requests to
+    <http://github.com/msenger/Monitor-Simple/issues>.
 
   Known bugs and limitations
     Locking remote files
@@ -914,28 +908,11 @@ BUGS
 
         Similarly, log files are not using any locking.
 
-SUPPORT
-    You can find documentation for this module with the perldoc command.
-
-        perldoc Monitor::Simple
-
-    You can also look for information at:
-
-    *   RT: CPAN's request tracker
-
-        <http://rt.cpan.org/NoAuth/Bugs.html?Dist=Monitor-Simple>
-
-    *   AnnoCPAN: Annotated CPAN documentation
-
-        <http://annocpan.org/dist/Monitor-Simple>
-
-    *   CPAN Ratings
-
-        <http://cpanratings.perl.org/d/Monitor-Simple>
-
-    *   Search CPAN
-
-        <http://search.cpan.org/dist/Monitor-Simple/>
+ACKNOWLEDGMENT
+    Thanks to Gisbert W. Selke "<gws@cpan.org>" the tests should be now
+    working also under Windows. He also provided a new version of the
+    "check_mem.pl" - under the name *check_mem2.pl* - a plugin, that should
+    work both under Windows and Unix.
 
 AUTHOR
     Martin Senger <martin.senger@gmail.com>

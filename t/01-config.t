@@ -96,9 +96,13 @@ is (ref ($config->{general}->{notifier}->[0]->{args}),
     "notifier/args should be an arrayref");
 
 # setting default values
-ok ($config->{general}->{'plugins-dir'} =~ m{Monitor/Simple/plugins$},
+my $plugindir = File::Spec->catdir(qw(Monitor Simple plugins));
+$plugindir =~ s/\\/\\\\/g;
+ok ($config->{general}->{'plugins-dir'} =~ m{$plugindir$},
     "Bad default value for plugins directory: $config->{general}->{'plugins-dir'}");
-ok ($config->{general}->{'notifiers-dir'} =~ m{Monitor/Simple/notifiers$},
+my $notifiersdir = File::Spec->catdir(qw(Monitor Simple notifiers));
+$notifiersdir =~ s/\\/\\\\/g;
+ok ($config->{general}->{'notifiers-dir'} =~ m{$notifiersdir$},
     "Bad default value for notifiers directory: $config->{general}->{'notifiers-dir'}");
 {
     my $service_id = 'no-name-service';

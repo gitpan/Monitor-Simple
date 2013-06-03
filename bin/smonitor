@@ -18,7 +18,7 @@ use Data::Dumper;
 use Monitor::Simple;
 use Log::Log4perl qw(:easy);
 
-our $VERSION = '0.2.6'; # VERSION
+our $VERSION = '0.2.7'; # VERSION
 
 # -----------------------------------------------------------------
 # Command-line arguments and script usage
@@ -144,7 +144,7 @@ smonitor - command-line tool for monitoring services
 
 =head1 VERSION
 
-version 0.2.6
+version 0.2.7
 
 =head1 SYNOPSIS
 

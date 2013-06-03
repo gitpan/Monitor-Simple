@@ -5,8 +5,14 @@ BEGIN {
     # perl used to start this test (because in such cases there may be
     # missing Perl modules during invocation the external plugins)
     use File::Which;
+    use File::Spec;
     my $default_perl = which ('perl');
-    unless ($default_perl and $default_perl eq $^X) {
+    my $test_perl    = $^X;
+    if (File::Spec->case_tolerant()) {
+      $default_perl  = lc($default_perl);
+      $test_perl     = lc($test_perl);
+    }
+    unless ($default_perl and $default_perl eq $test_perl) {
         require Test::More;
         Test::More::plan (skip_all => 'default perl differs from the one used for testing');
     }
