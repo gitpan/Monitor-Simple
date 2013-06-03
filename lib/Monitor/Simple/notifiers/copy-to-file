@@ -59,7 +59,7 @@ if ($login_name) {
 
 } else {
     # local file
-    open ($out, '>>', $output_file)
+    open (my $out, '>>', $output_file)
         or LOGDIE ("Cannot open file '$output_file' for writting: $!\n");
     while (<$msg>) {
         &Monitor::Simple::Output::lock_file ($out);

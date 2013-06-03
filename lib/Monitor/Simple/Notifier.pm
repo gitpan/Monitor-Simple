@@ -16,7 +16,7 @@ use IO::CaptureOutput qw(capture_exec);
 use File::Spec;
 use File::Temp;
 
-our $VERSION = '0.2.5'; # VERSION
+our $VERSION = '0.2.6'; # VERSION
 
 my $Codes = {
     Monitor::Simple::NOTIFY_OK       => 1,
@@ -249,7 +249,7 @@ Monitor::Simple::Notifier - See documentation in Monitor::Simple
 
 =head1 VERSION
 
-version 0.2.5
+version 0.2.6
 
 =head1 AUTHOR
 
@@ -257,7 +257,7 @@ Martin Senger <martin.senger@gmail.com>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2012 by Martin Senger, CBRC-KAUST (Computational Biology Research Center - King Abdullah University of Science and Technology) All Rights Reserved.
+This software is copyright (c) 2013 by Martin Senger, CBRC-KAUST (Computational Biology Research Center - King Abdullah University of Science and Technology) All Rights Reserved.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

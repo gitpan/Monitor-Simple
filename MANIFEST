@@ -7,7 +7,6 @@ META.yml
 Makefile.PL
 README
 bin/smonitor
-dist.ini
 docs/Monitor-Simple.html
 docs/smonitor.html
 lib/Monitor/Simple.pm
@@ -18,6 +17,7 @@ lib/Monitor/Simple/Output.pm
 lib/Monitor/Simple/UserAgent.pm
 lib/Monitor/Simple/Utils.pm
 lib/Monitor/Simple/configs/bad-config.cfg
+lib/Monitor/Simple/configs/cbrc-apps-monitor-on-baloo.xml
 lib/Monitor/Simple/configs/erroneous-monitor-cfg.xml
 lib/Monitor/Simple/configs/monitor-default.css
 lib/Monitor/Simple/configs/monitor-simple-cfg.xml.template
@@ -51,7 +51,6 @@ t/data/c3.empty
 t/data/config.xml
 t/data/notifiers.xml
 t/data/plugins.xml
-t/release-distmeta.t
 t/release-eol.t
 t/release-no-tabs.t
 t/release-pod-syntax.t

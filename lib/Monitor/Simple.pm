@@ -12,7 +12,7 @@ package Monitor::Simple;
 use warnings;
 use strict;
 
-our $VERSION = '0.2.5'; # VERSION
+our $VERSION = '0.2.6'; # VERSION
 
 # values returned by plugins (compatible with Nagios'
 use constant {
@@ -169,7 +169,7 @@ Monitor::Simple - Simple monitoring of applications and services
 
 =head1 VERSION
 
-version 0.2.5
+version 0.2.6
 
 =head1 SYNOPSIS
 
@@ -1218,7 +1218,7 @@ Martin Senger <martin.senger@gmail.com>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2012 by Martin Senger, CBRC-KAUST (Computational Biology Research Center - King Abdullah University of Science and Technology) All Rights Reserved.
+This software is copyright (c) 2013 by Martin Senger, CBRC-KAUST (Computational Biology Research Center - King Abdullah University of Science and Technology) All Rights Reserved.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
