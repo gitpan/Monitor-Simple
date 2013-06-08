@@ -13,7 +13,7 @@ use warnings;
 use strict;
 use Log::Log4perl qw(:easy);
 
-our $VERSION = '0.2.7'; # VERSION
+our $VERSION = '0.2.8'; # VERSION
 
 my $default_loglevel  = 'INFO';
 my $default_logfile   = 'smonitor.log';
@@ -96,7 +96,7 @@ Monitor::Simple::Log - See documentation in Monitor::Simple
 
 =head1 VERSION
 
-version 0.2.7
+version 0.2.8
 
 =head1 AUTHOR
 

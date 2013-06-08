@@ -14,7 +14,7 @@ use LWP::UserAgent;
 use Monitor::Simple;
 use Log::Log4perl qw(:easy);
 
-our $VERSION = '0.2.7'; # VERSION
+our $VERSION = '0.2.8'; # VERSION
 
 #-----------------------------------------------------------------
 # Create and return a user agent HTTP header.
@@ -236,7 +236,7 @@ Monitor::Simple::UserAgent - See documentation in Monitor::Simple
 
 =head1 VERSION
 
-version 0.2.7
+version 0.2.8
 
 =head1 AUTHOR
 

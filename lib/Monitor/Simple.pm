@@ -12,7 +12,7 @@ package Monitor::Simple;
 use warnings;
 use strict;
 
-our $VERSION = '0.2.7'; # VERSION
+our $VERSION = '0.2.8'; # VERSION
 
 # values returned by plugins (compatible with Nagios'
 use constant {
@@ -167,7 +167,7 @@ Monitor::Simple - Simple monitoring of applications and services
 
 =head1 VERSION
 
-version 0.2.7
+version 0.2.8
 
 =head1 SYNOPSIS
 

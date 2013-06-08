@@ -16,7 +16,7 @@ use IO::CaptureOutput qw(capture_exec);
 use File::Spec;
 use File::Temp;
 
-our $VERSION = '0.2.7'; # VERSION
+our $VERSION = '0.2.8'; # VERSION
 
 my $Codes = {
     Monitor::Simple::NOTIFY_OK       => 1,
@@ -249,7 +249,7 @@ Monitor::Simple::Notifier - See documentation in Monitor::Simple
 
 =head1 VERSION
 
-version 0.2.7
+version 0.2.8
 
 =head1 AUTHOR
 

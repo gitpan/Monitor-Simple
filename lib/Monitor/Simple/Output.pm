@@ -13,7 +13,7 @@ package Monitor::Simple::Output;
 use Monitor::Simple;
 use Log::Log4perl qw(:easy);
 
-our $VERSION = '0.2.7'; # VERSION
+our $VERSION = '0.2.8'; # VERSION
 
 my @Headers = ('DATE', 'SERVICE', 'STATUS', 'MESSAGE');
 
@@ -311,7 +311,7 @@ Monitor::Simple::Output - See documentation in Monitor::Simple
 
 =head1 VERSION
 
-version 0.2.7
+version 0.2.8
 
 =head1 AUTHOR
 

@@ -1,3 +1,10 @@
+2013-06-08  Martin Senger  <martin.senger&#64;gmail.com>
+
+	* Version 0.2.8 released.
+
+	* Fixed tests (some where depending on the order of keys in a
+	hash).
+
 2013-06-03  Martin Senger  <martin.senger&#64;gmail.com>
 
 	* Version 0.2.7 released.

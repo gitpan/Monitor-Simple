@@ -39,7 +39,7 @@ requires:
 resources:
   bugtracker: http://github.com/msenger/Monitor-Simple/issues
   homepage: http://search.cpan.org/dist/Monitor-Simple
-version: 0.2.7
+version: 0.2.8
 x_Dist_Zilla:
   perl:
     version: 5.014002
